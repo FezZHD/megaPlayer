@@ -1,0 +1,16 @@
+﻿<Window x:Name="mainWindow" x:Class="Player.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Player"
+        mc:Ignorable="d"
+         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+         Background="White"
+         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        Title="Player" Height="704" Width="904" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" MinWidth="500" MinHeight="500">
+    <Grid x:Name="mainButtons" Margin="0,407,0,0">
+        <ProgressBar x:Name="timeBar" Height="7" Background="#FF59ACE6" Width="auto" Margin="10,0,10,30" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
+        <Button x:Name="playButton" Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="390,80,390,80" MaxWidth="115" MaxHeight="115" Width="auto" Height="auto" BorderBrush="{x:Null}" Background="Black"/>
+    </Grid>
+</Window>

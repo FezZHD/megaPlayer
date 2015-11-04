@@ -8,12 +8,22 @@
          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
          Background="White"
          FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-        Title="Player" Height="704" Width="904" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" MinWidth="500" MinHeight="500">
-    <Grid x:Name="mainButtons" Margin="0,456,0,0" VerticalAlignment="Bottom" Background="#FF1E7B97">
-        <ProgressBar x:Name="timeBar" Height="7" Background="#FF59ACE6" Width="auto" Margin="10,0,10,30" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
-        <Button x:Name="playButton" Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="393,51,390,67" MaxWidth="200" MaxHeight="200" Width="50" Height="50" BorderBrush="{x:Null}" Foreground="{x:Null}">
+        Title="Player" Height="600" Width="800" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" MinWidth="500" MinHeight="500">
+    <Grid x:Name="mainButtons" VerticalAlignment="Bottom" Background="#FF1E7B97" Height="196" RenderTransformOrigin="0.505,0.477">
+        <Button x:Name="playButton" Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="325,65,375,80" Width="50" Height="50" Foreground="{x:Null}" VerticalAlignment="Center" RenderTransformOrigin="0.513,0.51">
             <Button.Background>
                 <ImageBrush ImageSource="images/playArrow.png"/>
+            </Button.Background>
+        </Button>
+        <Slider x:Name="slider" Margin="10,0,10,20" VerticalAlignment="Bottom" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFFF00F3"/>
+        <Button x:Name="playForward" Style="{StaticResource MaterialDesignFloatingActionButton}"  Margin="420,76,332,80" Width="40" Height="40" VerticalAlignment="Center" >
+            <Button.Background>
+                <ImageBrush ImageSource="images/playForward.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="playBackward" Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="285,76,467,80" Width="40" Height="40">
+            <Button.Background>
+                <ImageBrush ImageSource="images/playBackward.png"/>
             </Button.Background>
         </Button>
     </Grid>

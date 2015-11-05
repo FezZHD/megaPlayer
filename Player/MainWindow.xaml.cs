@@ -23,10 +23,29 @@ namespace Player
     /// </summary>
     public partial class MainWindow : Window
     {
+       
+
         public MainWindow()
         {
             InitializeComponent();
         }
-       
+
+        private void playButton_Click(object sender, RoutedEventArgs e)
+        {
+            pauseButton.Visibility = Visibility.Visible;
+            pauseButton.IsEnabled = true;
+
+            playButton.Visibility = Visibility.Hidden;
+            playButton.IsEnabled = false;
+        }
+
+        private void pauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            pauseButton.Visibility = Visibility.Hidden;
+            pauseButton.IsEnabled = false;
+
+            playButton.Visibility = Visibility.Visible;
+            playButton.IsEnabled = true;
+        }
     }
 }

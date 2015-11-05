@@ -66,14 +66,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Player.exe" size="15360">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Player.exe" size="180736">
       <assemblyIdentity name="Player" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Nz3uaW2hCBvVHLdVcz1hdr64b9EAZvyDrksboOgwSfQ=</dsig:DigestValue>
+        <dsig:DigestValue>QfTsPwe/w8uP2KHytYbndLKKEJHfoNndGryg1cLQC04=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

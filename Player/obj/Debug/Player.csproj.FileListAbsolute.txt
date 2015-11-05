@@ -89,3 +89,6 @@ e:\github\megaPlayer\Player\obj\Debug\Player.csproj.GenerateResource.Cache
 e:\github\megaPlayer\Player\obj\Debug\Player.TrustInfo.xml
 e:\github\megaPlayer\Player\obj\Debug\Player.exe.manifest
 e:\github\megaPlayer\Player\obj\Debug\Player.application
+e:\github\megaPlayer\megaPlayer\Player\bin\Debug\Player.exe.config
+e:\github\megaPlayer\megaPlayer\Player\obj\Debug\Player.exe
+e:\github\megaPlayer\megaPlayer\Player\obj\Debug\Player.pdb

@@ -161,9 +161,6 @@
     <Resource Include="images\note.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="images\sadFrog.jpg" />
   </ItemGroup>
   <ItemGroup>

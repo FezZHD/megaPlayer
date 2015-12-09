@@ -54,7 +54,7 @@ namespace Player
 
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog folderDlg = new System.Windows.Forms.FolderBrowserDialog();
+            FolderBrowserDialog folderDlg = new FolderBrowserDialog();
             folderDlg.Description = "Выберите папку с вашей музыкальной библиотекой.";
             DialogResult result = folderDlg.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)

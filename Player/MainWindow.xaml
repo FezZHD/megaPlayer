@@ -10,9 +10,9 @@
          FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
     Title="Player" Height="700" Width="1000" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" MinWidth="1000" MinHeight="700" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Icon="images/icon.ico">
     <Grid x:Name="mainGrid" MinWidth="800" MinHeight="600">
-        <Grid x:Name="mainPole" VerticalAlignment="Top" HorizontalAlignment="Right" Height="470" Width="992">
-            <Image x:Name="albumPic" Source="images/note.jpg" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,80,10,76" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
-            <ListBox x:Name="playerListBox" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Grid x:Name="mainPole" VerticalAlignment="Top" Margin="0,0,0,200">
+            <Image x:Name="albumPic" Source="images/note.jpg" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,10,0,40" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <ListBox x:Name="playerListBox" HorizontalAlignment="Left" VerticalAlignment="Center" SelectionChanged="playerListBox_SelectionChanged" Background="Transparent" Width="500"/>
         </Grid>
         <Grid x:Name="mainButtons" Background="#FF1E7B97" RenderTransformOrigin="0.505,0.477" MinWidth="600" MaxHeight="300" VerticalAlignment="Bottom" Height="200">
             <Button x:Name="playButton" Style="{StaticResource MaterialDesignFloatingActionButton}" Width="50" Height="50" Foreground="{x:Null}" VerticalAlignment="Center" BorderBrush="White" HorizontalAlignment="Center" Margin="0,75,0,72" Click="playButton_Click">
@@ -32,13 +32,13 @@
                     <ImageBrush ImageSource="images/pause.png"/>
                 </Button.Background>
             </Button>
-            <Slider x:Name="progressSlider" Margin="10,0,10,39" VerticalAlignment="Bottom" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF96CB91"/>
-            <Button x:Name="playForward" Style="{StaticResource MaterialDesignFloatingActionButton}" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" Margin="128,75,15,72"  >
+            <Slider x:Name="progressSlider" Margin="10,0,10,39" VerticalAlignment="Bottom" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF96CB91" Thumb.DragStarted="progressSlider_DragStarted"  Thumb.DragCompleted="progressSlider_DragCompleted" ValueChanged="progressSlider_ValueChanged"/>
+            <Button x:Name="playForward" Style="{StaticResource MaterialDesignFloatingActionButton}" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" Margin="128,75,15,72" Click="playForward_Click"  >
                 <Button.Background>
                     <ImageBrush ImageSource="images/playForward.png"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="playBackward" Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="15,75,128,72" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" >
+            <Button x:Name="playBackward" Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="15,75,128,72" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" Click="playBackward_Click" >
                 <Button.Background>
                     <ImageBrush ImageSource="images/playBackward.png"/>
                 </Button.Background>
@@ -51,7 +51,12 @@
                     <ImageBrush ImageSource="images/folderChoose.png"/>
                 </Button.Background>
             </Button>
-            <MediaElement x:Name="megaPlayer" HorizontalAlignment="Left" Height="100" Margin="442,204,0,-104" VerticalAlignment="Top" Width="100" Visibility="Hidden"/>
+            <MediaElement x:Name="megaPlayer" HorizontalAlignment="Left" Height="100" Margin="442,204,0,-104" VerticalAlignment="Top" Width="100" Visibility="Hidden" LoadedBehavior="Manual"/>
+            <Button x:Name="addFile" Content="Button" HorizontalAlignment="Right" Margin="0,10,37,0" VerticalAlignment="Top" Width="31" BorderBrush="{x:Null}" Foreground="{x:Null}" Height="28" Click="addFile_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="images/addFile.png"/>
+                </Button.Background>
+            </Button>
         </Grid>
     </Grid>
 </Window>

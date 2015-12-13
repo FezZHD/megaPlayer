@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Player
 {
@@ -12,6 +9,8 @@ namespace Player
         public string[] filesPath { get; set; }
         public static bool mediaPlayerIsPlaying = false;
         public static bool userIsDraggingSlider = false;
+        public static int clickedItemIndex;
         public static List<PlayerList> saveList; 
+        public static bool ignoreChange = false;
     }
 }

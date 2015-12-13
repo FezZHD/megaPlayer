@@ -50,6 +50,7 @@
                     <ImageBrush ImageSource="images/folderChoose.png"/>
                 </Button.Background>
             </Button>
+            <MediaElement x:Name="megaPlayer" HorizontalAlignment="Left" Height="100" Margin="442,204,0,-104" VerticalAlignment="Top" Width="100" Visibility="Hidden"/>
         </Grid>
     </Grid>
 </Window>

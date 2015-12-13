@@ -63,6 +63,10 @@
   <PropertyGroup>
     <StartupObject>MaterialDesignColors.WpfExample.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MaterialDesignColors, Version=1.0.0.14576, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.1.1\lib\net45\MaterialDesignColors.dll</HintPath>
@@ -179,13 +183,13 @@
     <Resource Include="images\sadFrog.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="images\pause.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\folderChoose.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

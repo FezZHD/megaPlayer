@@ -8,10 +8,11 @@
          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
          Background="White"
          FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-    Title="Player" Height="700" Width="1000" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" MinWidth="1000" MinHeight="700" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Icon="images/icon.png">
+    Title="Player" Height="700" Width="1000" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" MinWidth="1000" MinHeight="700" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Icon="images/icon.ico">
     <Grid x:Name="mainGrid" MinWidth="800" MinHeight="600">
-        <Grid x:Name="mainPole" Margin="0,13,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="456">
-            <Image x:Name="albumPic" Source="images/note.jpg" ScrollViewer.VerticalScrollBarVisibility="Disabled" VerticalAlignment="Center" Margin="0,80,0,76" HorizontalAlignment="Right"/>
+        <Grid x:Name="mainPole" VerticalAlignment="Top" HorizontalAlignment="Right" Height="470" Width="992">
+            <Image x:Name="albumPic" Source="images/note.jpg" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,80,10,76" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+            <ListBox x:Name="playerListBox" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </Grid>
         <Grid x:Name="mainButtons" Background="#FF1E7B97" RenderTransformOrigin="0.505,0.477" MinWidth="600" MaxHeight="300" VerticalAlignment="Bottom" Height="200">
             <Button x:Name="playButton" Style="{StaticResource MaterialDesignFloatingActionButton}" Width="50" Height="50" Foreground="{x:Null}" VerticalAlignment="Center" BorderBrush="White" HorizontalAlignment="Center" Margin="0,75,0,72" Click="playButton_Click">

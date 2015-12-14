@@ -20,7 +20,10 @@ using Microsoft.Win32;
 using System.Threading;
 using System.Windows.Threading;
 using Application = System.Windows.Application;
+using File = System.IO.File;
+using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Path = System.IO.Path;
 using SelectionMode = System.Windows.Controls.SelectionMode;
 
 namespace Player
@@ -57,13 +60,19 @@ namespace Player
                 if (progressSlider.Maximum == progressSlider.Value)
                 {
                     globals.clickedItemIndex++;
+                    if (globals.clickedItemIndex == globals.saveList.Count)
+                    {
+                        globals.clickedItemIndex = 0;
+                        playerListBox.SelectedIndex = 0;
+                        return;
+                    }
                     megaPlayer.Source = new Uri(globals.saveList[globals.clickedItemIndex].FilePath);
                     songName.Content = globals.saveList[globals.clickedItemIndex].SongName;
                     artist.Content = globals.saveList[globals.clickedItemIndex].Artist;
                     album.Content = globals.saveList[globals.clickedItemIndex].Album;
                     progressSlider.Value = 0;
-                    megaPlayer.Play();
                     playerListBox.SelectedIndex = globals.clickedItemIndex;
+                    playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
                 }
             }
         }
@@ -132,7 +141,7 @@ namespace Player
                             }
                             else
                             {
-                                outputList.Add(new PlayerList(musicFile.Name, null, null, filePath));
+                                outputList.Add(new PlayerList(Path.GetFileName(filePath), null, null, filePath));
                             }
                         }
 
@@ -169,8 +178,7 @@ namespace Player
                   {
                       if (globals.saveList[index].Artist == null)
                       {
-                          TagLib.File musicFile = TagLib.File.Create(globals.saveList[index].FilePath);
-                          playerListBox.Items.Add(musicFile.Name + " - " + "Unknown Artist");
+                          playerListBox.Items.Add(globals.saveList[index].SongName + " - " + "Unknown Artist");
                       }
                       else
                       {
@@ -195,8 +203,8 @@ namespace Player
                 {
                     if (globals.saveList[index].Artist == null)
                     {
-                        TagLib.File musicFile = TagLib.File.Create(globals.saveList[index].FilePath);
-                        playerListBox.Items.Add(musicFile.Name + " - " + "Unknown Artist");
+
+                        playerListBox.Items.Add(globals.saveList[index].SongName + " - " + "Unknown Artist");
                     }
                     else
                     {
@@ -231,8 +239,7 @@ namespace Player
                     {
                         if (globals.saveList[index].Artist == null)
                         {
-                            TagLib.File musicFile = TagLib.File.Create(globals.saveList[index].FilePath);
-                            playerListBox.Items.Add(musicFile.Name + " - " + "Unknown Artist");
+                            playerListBox.Items.Add(globals.saveList[index].SongName + " - " + "Unknown Artist");
                         }
                         else
                         {
@@ -247,6 +254,7 @@ namespace Player
 
         private void playerListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            megaPlayer.Stop();
             globals.mediaPlayerIsPlaying = true;
             globals.clickedItemIndex = playerListBox.SelectedIndex;
             if (globals.clickedItemIndex == -1)
@@ -258,14 +266,21 @@ namespace Player
                 playButton.IsEnabled = true;
                 return;
             }
-            megaPlayer.Source = new Uri(globals.saveList[globals.clickedItemIndex].FilePath);
-            songName.Content = globals.saveList[globals.clickedItemIndex].SongName;
-            artist.Content = globals.saveList[globals.clickedItemIndex].Artist;
-            album.Content = globals.saveList[globals.clickedItemIndex].Album;
-            progressSlider.Value = 0;
-            megaPlayer.Play();
-            
 
+            if (File.Exists(globals.saveList[globals.clickedItemIndex].FilePath))
+            {   
+                megaPlayer.Source = new Uri(globals.saveList[globals.clickedItemIndex].FilePath);
+                songName.Content = globals.saveList[globals.clickedItemIndex].SongName;
+                artist.Content = globals.saveList[globals.clickedItemIndex].Artist;
+                album.Content = globals.saveList[globals.clickedItemIndex].Album;
+                megaPlayer.Play();
+                progressSlider.Value = 0;
+            }
+            else
+            {
+                MessageBox.Show(@"Файл повреждём или удалён. Будет проигрываться следующий трек");
+                playerListBox.SelectedIndex++;
+            }    
             playButton.Visibility = Visibility.Hidden;
             playButton.IsEnabled = false;
 
@@ -284,7 +299,7 @@ namespace Player
             globals.clickedItemIndex++;
             if (globals.clickedItemIndex > (globals.saveList.Count - 1))
             {
-                globals.clickedItemIndex--;
+                globals.clickedItemIndex = 0;
                 return;
             }
             megaPlayer.Source = new Uri(globals.saveList[globals.clickedItemIndex].FilePath);
@@ -292,8 +307,8 @@ namespace Player
             artist.Content = globals.saveList[globals.clickedItemIndex].Artist;
             album.Content = globals.saveList[globals.clickedItemIndex].Album;
             progressSlider.Value = 0;
-            megaPlayer.Play();
             playerListBox.SelectedIndex = globals.clickedItemIndex;
+            playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
 
         }
 
@@ -314,8 +329,8 @@ namespace Player
             artist.Content = globals.saveList[globals.clickedItemIndex].Artist;
             album.Content = globals.saveList[globals.clickedItemIndex].Album;
             progressSlider.Value = 0;
-            megaPlayer.Play();
             playerListBox.SelectedIndex = globals.clickedItemIndex;
+            playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
         }
 
     }

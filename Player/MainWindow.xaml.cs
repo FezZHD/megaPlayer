@@ -21,6 +21,7 @@ using System.Threading;
 using System.Windows.Threading;
 using Application = System.Windows.Application;
 using File = System.IO.File;
+using ListBox = System.Windows.Forms.ListBox;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using Path = System.IO.Path;
@@ -38,17 +39,26 @@ namespace Player
         {
             InitializeComponent();
 
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += TimerTick;
-            timer.Start();
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
+            dispatcherTimer.Tick += TimerTick;
+            dispatcherTimer.Start();
+           
             playerListBox.SelectionMode = SelectionMode.Single;
         }
 
 
         private void TimerTick(object sender, EventArgs e)
         {
-            if ((megaPlayer.Source != null) && (megaPlayer.NaturalDuration.HasTimeSpan) &&
+            if (globals.saveList == null)
+            {
+                progressSlider.IsEnabled = false;
+            }
+            else
+            {
+                progressSlider.IsEnabled = true;
+            }
+                if ((megaPlayer.Source != null) && (megaPlayer.NaturalDuration.HasTimeSpan) &&
                 (!globals.userIsDraggingSlider))
             {
                 globals.ignoreChange = true;
@@ -97,11 +107,8 @@ namespace Player
                 return;
             }
             globals.mediaPlayerIsPlaying = false;
-            pauseButton.Visibility = Visibility.Hidden;
-            pauseButton.IsEnabled = false;
-
-            playButton.Visibility = Visibility.Visible;
-            playButton.IsEnabled = true;
+            changingButtonsClass changingButtons = new changingButtonsClass();
+            changingButtons.playButtonVision(pauseButton, playButton);
 
 
         }
@@ -122,12 +129,9 @@ namespace Player
             {
                 return;
             }
+            changingButtonsClass changingButtons = new changingButtonsClass();
+            changingButtons.pauseButtonVision(pauseButton, playButton);
             megaPlayer.Play();
-            playButton.Visibility = Visibility.Hidden;
-            playButton.IsEnabled = false;
-
-            pauseButton.Visibility = Visibility.Visible;
-            pauseButton.IsEnabled = true;
             globals.mediaPlayerIsPlaying = true;
 
         }
@@ -140,11 +144,8 @@ namespace Player
             }
             globals.mediaPlayerIsPlaying = false;
             megaPlayer.Pause();
-            pauseButton.Visibility = Visibility.Hidden;
-            pauseButton.IsEnabled = false;
-
-            playButton.Visibility = Visibility.Visible;
-            playButton.IsEnabled = true;
+            changingButtonsClass changingButtons = new changingButtonsClass();
+            changingButtons.playButtonVision(pauseButton, playButton);
             
         }
 
@@ -170,6 +171,37 @@ namespace Player
 
         }
 
+        private void addingMusicFilesFromDialog(string[] fileStrings, FolderBrowserDialog folderDialog, List<PlayerList> playerList)
+        {
+            fileStrings = Directory.GetFiles(folderDialog.SelectedPath, "*.mp3",
+                SearchOption.AllDirectories);
+            addingMusicFiles(fileStrings, playerList);
+            playerListBox.Items.Clear();
+            if (globals.saveList == null)
+            {
+                 globals.saveList = new List<PlayerList>();
+            }
+            for (int index = 0; index < playerList.Count;index++) 
+            {
+                globals.saveList.Add(new PlayerList(playerList[index].SongName,playerList[index].Artist,playerList[index].Album,playerList[index].FilePath));
+            }
+            globals.saveList.Sort((first, second) => String.Compare(first.SongName, second.SongName, StringComparison.Ordinal));
+            for (int index = 0; index < globals.saveList.Count; index++)
+            {
+                if (globals.saveList[index].Artist == null)
+                {
+
+                    playerListBox.Items.Add(globals.saveList[index].SongName + " - " + "Unknown Artist");
+                }
+                else
+                {
+                    playerListBox.Items.Add(globals.saveList[index].SongName + " - " +
+                                            globals.saveList[index].Artist);
+                }
+            }
+        }
+
+
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e)
         {
             globals filePathsString = new globals();
@@ -178,61 +210,24 @@ namespace Player
                 globals.mediaPlayerIsPlaying = false;
                 megaPlayer.Stop();
 
-                pauseButton.Visibility = Visibility.Hidden;
-                pauseButton.IsEnabled = false;
-
-                playButton.Visibility = Visibility.Visible;
-                playButton.IsEnabled = true;
+                changingButtonsClass changingButtons = new changingButtonsClass();
+                changingButtons.playButtonVision(pauseButton, playButton);
             }
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
             folderDialog.Description = @"Выберите папку с вашей музыкальной библиотекой.";
             DialogResult dialogResult = folderDialog.ShowDialog();
-            if (globals.saveList != null)
-            {
-                if (dialogResult == System.Windows.Forms.DialogResult.OK)
-                {
-                    filePathsString.filesPath = Directory.GetFiles(folderDialog.SelectedPath, "*.mp3",
-                        SearchOption.AllDirectories);
-                    addingMusicFiles(filePathsString.filesPath,globals.saveList);
-                    playerListBox.Items.Clear();
-                    globals.saveList.Sort((x, y) => String.Compare(x.SongName, y.SongName, StringComparison.Ordinal));
-                  for (int index = 0; index < globals.saveList.Count; index++)
-                  {
-                      if (globals.saveList[index].Artist == null)
-                      {
-                          playerListBox.Items.Add(globals.saveList[index].SongName + " - " + "Unknown Artist");
-                      }
-                      else
-                      {
-                          playerListBox.Items.Add(globals.saveList[index].SongName + " - " +
-                                                  globals.saveList[index].Artist);
-                      }
-                  }
-                    return;
-                }
-            }
 
-            List<PlayerList> playerList = new List<PlayerList>();
+           
             if (dialogResult == System.Windows.Forms.DialogResult.OK)
             {
-                filePathsString.filesPath = Directory.GetFiles(folderDialog.SelectedPath, "*.mp3",
-                    SearchOption.AllDirectories);
-                    addingMusicFiles(filePathsString.filesPath,playerList);
-                playerListBox.Items.Clear();
-                playerList.Sort((first, second) => String.Compare(first.SongName, second.SongName, StringComparison.Ordinal));
-                globals.saveList = playerList;
-                for (int index = 0; index < globals.saveList.Count; index++)
+                if (globals.saveList != null)
                 {
-                    if (globals.saveList[index].Artist == null)
-                    {
-
-                        playerListBox.Items.Add(globals.saveList[index].SongName + " - " + "Unknown Artist");
-                    }
-                    else
-                    {
-                        playerListBox.Items.Add(globals.saveList[index].SongName + " - " +
-                                                globals.saveList[index].Artist);
-                    }
+                    addingMusicFilesFromDialog(filePathsString.filesPath, folderDialog, globals.saveList);
+                }
+                else
+                {
+                    List<PlayerList> playerList = new List<PlayerList>();
+                    addingMusicFilesFromDialog(filePathsString.filesPath, folderDialog, playerList);
                 }
             }
         }
@@ -243,11 +238,8 @@ namespace Player
             {
                 globals.mediaPlayerIsPlaying = false;
                 megaPlayer.Stop();
-                pauseButton.Visibility = Visibility.Hidden;
-                pauseButton.IsEnabled = false;
-
-                playButton.Visibility = Visibility.Visible;
-                playButton.IsEnabled = true;
+                changingButtonsClass changingButtons = new changingButtonsClass();
+                changingButtons.playButtonVision(pauseButton, playButton);
             }
             OpenFileDialog openMusicFileDialog = new OpenFileDialog();
             openMusicFileDialog.Multiselect = true;
@@ -277,15 +269,12 @@ namespace Player
         private void playerListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             megaPlayer.Stop();
+            changingButtonsClass changingButtons = new changingButtonsClass();
             globals.mediaPlayerIsPlaying = true;
             globals.clickedItemIndex = playerListBox.SelectedIndex;
             if (globals.clickedItemIndex == -1)
             {
-                pauseButton.Visibility = Visibility.Hidden;
-                pauseButton.IsEnabled = false;
-
-                playButton.Visibility = Visibility.Visible;
-                playButton.IsEnabled = true;
+                changingButtons.playButtonVision(pauseButton, playButton);
                 return;
             }
 
@@ -298,7 +287,7 @@ namespace Player
                 TagLib.File musicFile = TagLib.File.Create(globals.saveList[globals.clickedItemIndex].FilePath);
                 if (musicFile.Tag.Pictures.Length > 0)
                 {
-                    TagLib.IPicture albumArt = musicFile.Tag.Pictures[0];
+                    IPicture albumArt = musicFile.Tag.Pictures[0];
                     MemoryStream pictureMemoryStream = new MemoryStream(albumArt.Data.Data);
                     pictureMemoryStream.Seek(0, SeekOrigin.Begin);
 
@@ -330,12 +319,8 @@ namespace Player
             {
                 MessageBox.Show(@"Файл повреждём или удалён. Будет проигрываться следующий трек");
                 playerListBox.SelectedIndex++;
-            }    
-            playButton.Visibility = Visibility.Hidden;
-            playButton.IsEnabled = false;
-
-            pauseButton.Visibility = Visibility.Visible;
-            pauseButton.IsEnabled = true;
+            }
+            changingButtons.pauseButtonVision(pauseButton, playButton);
             globals.mediaPlayerIsPlaying = true;
 
         }
@@ -400,5 +385,32 @@ namespace Player
             globals.albumPicWidth = albumPic.ActualWidth;
 
         }
+
+        private void clearListButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (globals.saveList == null)
+            {
+                MessageBox.Show(@"Плейлист пуст.", @"Очистка плейлиста");
+                return;
+            }
+            MessageBoxResult resultNotification = MessageBox.Show(@"Вы хотите очистить ваш плейлист?",
+                @"Очистка плейлиста", MessageBoxButton.OKCancel);
+            if (resultNotification == MessageBoxResult.OK)
+            {
+                progressSlider.Value = 0;
+                progressSlider.IsEnabled = false;
+                timer.Text = null;
+                megaPlayer.Source = null;
+                megaPlayer.Stop();
+                globals.saveList = null;
+                playerListBox.Items.Clear();
+                songName.Content = @"Song Name (not Sandstorm)";
+                album.Content = @"Album";
+                artist.Content = @"Artist";
+                changingButtonsClass changingButtons = new changingButtonsClass();
+                changingButtons.playButtonVision(pauseButton, playButton);
+            }
+        }
+       }
     }
-}
+

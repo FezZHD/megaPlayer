@@ -114,6 +114,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="changingButtonsClass.cs" />
     <Compile Include="globals.cs" />
     <Compile Include="playerList.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -197,6 +198,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\note.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\clearList.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

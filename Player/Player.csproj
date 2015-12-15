@@ -181,9 +181,6 @@
     <Resource Include="images\playForward.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\note.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="images\sadFrog.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +194,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\addFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\note.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

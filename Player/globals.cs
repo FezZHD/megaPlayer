@@ -12,5 +12,8 @@ namespace Player
         public static int clickedItemIndex;
         public static List<PlayerList> saveList; 
         public static bool ignoreChange = false;
+        public static double albumPicHeight;
+        public static double albumPicWidth;
+
     }
 }

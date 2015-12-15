@@ -42,7 +42,6 @@ namespace Player
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += TimerTick;
             timer.Start();
-          
             playerListBox.SelectionMode = SelectionMode.Single;
         }
 
@@ -66,10 +65,6 @@ namespace Player
                         playerListBox.SelectedIndex = 0;
                         return;
                     }
-                    megaPlayer.Source = new Uri(globals.saveList[globals.clickedItemIndex].FilePath);
-                    songName.Content = globals.saveList[globals.clickedItemIndex].SongName;
-                    artist.Content = globals.saveList[globals.clickedItemIndex].Artist;
-                    album.Content = globals.saveList[globals.clickedItemIndex].Album;
                     progressSlider.Value = 0;
                     playerListBox.SelectedIndex = globals.clickedItemIndex;
                     playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
@@ -80,25 +75,50 @@ namespace Player
         private void progressSlider_DragStarted(object sender, DragStartedEventArgs e)
         {
             globals.userIsDraggingSlider = true;
+            megaPlayer.Pause();
+            playButton.IsEnabled = false;
+            pauseButton.IsEnabled = false;
+            playForward.IsEnabled = false;
+            playBackward.IsEnabled = false;
         }
 
         private void progressSlider_DragCompleted(object sender, DragCompletedEventArgs e)
         {
+           
             globals.userIsDraggingSlider = false;
+            playButton.IsEnabled = true;
+            pauseButton.IsEnabled = true;
+            playForward.IsEnabled = true;
+            playBackward.IsEnabled = true;
             megaPlayer.Position = TimeSpan.FromSeconds(progressSlider.Value);
+            if (globals.mediaPlayerIsPlaying)
+            {
+                megaPlayer.Play();
+                return;
+            }
+            globals.mediaPlayerIsPlaying = false;
+            pauseButton.Visibility = Visibility.Hidden;
+            pauseButton.IsEnabled = false;
+
+            playButton.Visibility = Visibility.Visible;
+            playButton.IsEnabled = true;
+
+
         }
 
         private void progressSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            //lblProgressStatus.Text = TimeSpan.FromSeconds(progressSlider.Value).ToString(@"hh\:mm\:ss");
+        {  
+           timer.Text = TimeSpan.FromSeconds(progressSlider.Value).ToString(@"mm\:ss");
             if (!globals.ignoreChange)
-                    megaPlayer.Position = TimeSpan.FromSeconds(progressSlider.Value);
+            {
+                megaPlayer.Position = TimeSpan.FromSeconds(progressSlider.Value);
+            }
         }
 
 
         private void playButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!globals.mediaPlayerIsPlaying)
+            if (!globals.mediaPlayerIsPlaying && megaPlayer.Source == null)
             {
                 return;
             }
@@ -118,6 +138,7 @@ namespace Player
             {
                 return;
             }
+            globals.mediaPlayerIsPlaying = false;
             megaPlayer.Pause();
             pauseButton.Visibility = Visibility.Hidden;
             pauseButton.IsEnabled = false;
@@ -155,6 +176,7 @@ namespace Player
             if (globals.mediaPlayerIsPlaying)
             {
                 globals.mediaPlayerIsPlaying = false;
+                megaPlayer.Stop();
 
                 pauseButton.Visibility = Visibility.Hidden;
                 pauseButton.IsEnabled = false;
@@ -220,7 +242,7 @@ namespace Player
             if (globals.mediaPlayerIsPlaying)
             {
                 globals.mediaPlayerIsPlaying = false;
-
+                megaPlayer.Stop();
                 pauseButton.Visibility = Visibility.Hidden;
                 pauseButton.IsEnabled = false;
 
@@ -273,6 +295,34 @@ namespace Player
                 songName.Content = globals.saveList[globals.clickedItemIndex].SongName;
                 artist.Content = globals.saveList[globals.clickedItemIndex].Artist;
                 album.Content = globals.saveList[globals.clickedItemIndex].Album;
+                TagLib.File musicFile = TagLib.File.Create(globals.saveList[globals.clickedItemIndex].FilePath);
+                if (musicFile.Tag.Pictures.Length > 0)
+                {
+                    TagLib.IPicture albumArt = musicFile.Tag.Pictures[0];
+                    MemoryStream pictureMemoryStream = new MemoryStream(albumArt.Data.Data);
+                    pictureMemoryStream.Seek(0, SeekOrigin.Begin);
+
+                    BitmapImage albumArtImage = new BitmapImage();
+                    albumArtImage.BeginInit();
+                    albumArtImage.StreamSource = pictureMemoryStream;
+                    albumArtImage.EndInit();
+                    albumPic.Source = albumArtImage;
+                    albumPic.Width = globals.albumPicWidth;
+                    albumPic.Height = globals.albumPicHeight;
+                }
+                else
+                {
+                    BitmapImage noteImage = new BitmapImage();
+                    noteImage.BeginInit();
+                    noteImage.UriSource = new Uri("images/note.png", UriKind.Relative);
+
+                    noteImage.EndInit();
+                    albumPic.Stretch = Stretch.Fill;
+                    albumPic.Source = noteImage;
+                    albumPic.Width = globals.albumPicWidth;
+                    albumPic.Height = globals.albumPicHeight;
+                }
+                    
                 megaPlayer.Play();
                 progressSlider.Value = 0;
             }
@@ -292,46 +342,63 @@ namespace Player
 
         private void playForward_Click(object sender, RoutedEventArgs e)
         {
+            globals.clickedItemIndex++;
+          
             if (!globals.mediaPlayerIsPlaying)
             {
                 return;
             }
-            globals.clickedItemIndex++;
+            
             if (globals.clickedItemIndex > (globals.saveList.Count - 1))
             {
-                globals.clickedItemIndex = 0;
+                globals.clickedItemIndex--;
+                MessageBox.Show(@"Список треков окончен");
                 return;
             }
-            megaPlayer.Source = new Uri(globals.saveList[globals.clickedItemIndex].FilePath);
-            songName.Content = globals.saveList[globals.clickedItemIndex].SongName;
-            artist.Content = globals.saveList[globals.clickedItemIndex].Artist;
-            album.Content = globals.saveList[globals.clickedItemIndex].Album;
-            progressSlider.Value = 0;
             playerListBox.SelectedIndex = globals.clickedItemIndex;
+            progressSlider.Value = 0;
             playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
+            globals.mediaPlayerIsPlaying = true;
+            
 
         }
 
         private void playBackward_Click(object sender, RoutedEventArgs e)
         {
+            globals.clickedItemIndex--;
+           
             if (!globals.mediaPlayerIsPlaying)
             {
                 return;
             }
-            globals.clickedItemIndex--;
             if (globals.clickedItemIndex < 0)
             {
                 globals.clickedItemIndex++;
                 return;
             }
-            megaPlayer.Source = new Uri(globals.saveList[globals.clickedItemIndex].FilePath);
-            songName.Content = globals.saveList[globals.clickedItemIndex].SongName;
-            artist.Content = globals.saveList[globals.clickedItemIndex].Artist;
-            album.Content = globals.saveList[globals.clickedItemIndex].Album;
-            progressSlider.Value = 0;
             playerListBox.SelectedIndex = globals.clickedItemIndex;
+            megaPlayer.Source = new Uri(globals.saveList[globals.clickedItemIndex].FilePath);
+            progressSlider.Value = 0;
             playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
+            globals.mediaPlayerIsPlaying = true;
         }
 
+
+        private void progressSlider_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            megaPlayer.Pause();
+        }
+
+        private void progressSlider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            megaPlayer.Play();
+        }
+
+        private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            globals.albumPicHeight = albumPic.ActualHeight;
+            globals.albumPicWidth = albumPic.ActualWidth;
+
+        }
     }
 }

@@ -312,7 +312,7 @@ namespace Player
             }
             else
             {
-                MessageBox.Show(@"Файл повреждём или удалён. Будет проигрываться следующий трек");
+                MessageBox.Show(@"Файл удалён. Будет проигрываться следующий трек");
                 playerListBox.SelectedIndex++;
             }
             changingButtons.pauseButtonVision(pauseButton, playButton);
@@ -353,6 +353,7 @@ namespace Player
             }
             if (globals.clickedItemIndex < 0)
             {
+                MessageBox.Show(@"Невозможно воиспроизвети , т.к предыдущий трек является первым в спивке.");
                 globals.clickedItemIndex++;
                 return;
             }
@@ -376,8 +377,10 @@ namespace Player
 
         private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            globals.albumPicHeight = albumPic.ActualHeight;
-            globals.albumPicWidth = albumPic.ActualWidth;
+            globals.albumPicHeight = mainWindow.ActualHeight * 0.57;
+            globals.albumPicWidth = mainWindow.ActualWidth * 0.4;
+            albumPic.Height = globals.albumPicHeight;
+            albumPic.Width = globals.albumPicWidth;
 
         }
 

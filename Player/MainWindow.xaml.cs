@@ -1,27 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
 using System.Windows;
 using TagLib;
 using System.Windows.Forms;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Win32;
-using System.Threading;
 using System.Windows.Threading;
-using Application = System.Windows.Application;
 using File = System.IO.File;
-using ListBox = System.Windows.Forms.ListBox;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using Path = System.IO.Path;
@@ -32,7 +21,7 @@ namespace Player
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
 
         public MainWindow()
@@ -171,11 +160,11 @@ namespace Player
 
         }
 
-        private void addingMusicFilesFromDialog(string[] fileStrings, FolderBrowserDialog folderDialog, List<PlayerList> playerList)
+        private void addingMusicFilesFromDialog(string[] fileString, FolderBrowserDialog folderDialog, List<PlayerList> playerList)
         {
-            fileStrings = Directory.GetFiles(folderDialog.SelectedPath, "*.mp3",
+            fileString = Directory.GetFiles(folderDialog.SelectedPath, "*.mp3",
                 SearchOption.AllDirectories);
-            addingMusicFiles(fileStrings, playerList);
+            addingMusicFiles(fileString, playerList);
             playerListBox.Items.Clear();
             if (globals.saveList == null)
             {
@@ -266,6 +255,24 @@ namespace Player
                 
         }
 
+        private void setImage(BitmapImage imageBitmap,string imagePath, MemoryStream pictureMemoryStream = null)
+        {
+            imageBitmap.BeginInit();
+            if (imagePath != null)
+            {
+                imageBitmap.UriSource = new Uri(imagePath, UriKind.Relative);
+            }
+           if (pictureMemoryStream != null)
+           {
+               imageBitmap.StreamSource = pictureMemoryStream;
+           }
+            imageBitmap.EndInit();
+            albumPic.Stretch = Stretch.Fill;
+            albumPic.Source = imageBitmap;
+            albumPic.Width = globals.albumPicWidth;
+            albumPic.Height = globals.albumPicHeight;
+        }
+
         private void playerListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             megaPlayer.Stop();
@@ -292,24 +299,12 @@ namespace Player
                     pictureMemoryStream.Seek(0, SeekOrigin.Begin);
 
                     BitmapImage albumArtImage = new BitmapImage();
-                    albumArtImage.BeginInit();
-                    albumArtImage.StreamSource = pictureMemoryStream;
-                    albumArtImage.EndInit();
-                    albumPic.Source = albumArtImage;
-                    albumPic.Width = globals.albumPicWidth;
-                    albumPic.Height = globals.albumPicHeight;
+                    setImage(albumArtImage, null ,pictureMemoryStream);
                 }
                 else
                 {
                     BitmapImage noteImage = new BitmapImage();
-                    noteImage.BeginInit();
-                    noteImage.UriSource = new Uri("images/note.png", UriKind.Relative);
-
-                    noteImage.EndInit();
-                    albumPic.Stretch = Stretch.Fill;
-                    albumPic.Source = noteImage;
-                    albumPic.Width = globals.albumPicWidth;
-                    albumPic.Height = globals.albumPicHeight;
+                    setImage(noteImage,"images/note.png");
                 }
                     
                 megaPlayer.Play();
@@ -407,6 +402,8 @@ namespace Player
                 songName.Content = @"Song Name (not Sandstorm)";
                 album.Content = @"Album";
                 artist.Content = @"Artist";
+                BitmapImage noteImage = new BitmapImage();
+                setImage(noteImage,"images/note.png");
                 changingButtonsClass changingButtons = new changingButtonsClass();
                 changingButtons.playButtonVision(pauseButton, playButton);
             }

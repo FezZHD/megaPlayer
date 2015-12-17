@@ -230,8 +230,11 @@ namespace Player
                 {
                     if (playerListBox.SelectedIndex != -1)
                     {
-                        isEmpty = true;
                         outputPath = globals.saveList[playerListBox.SelectedIndex].FilePath;
+                    }
+                    else
+                    {
+                        isEmpty = true;
                     }
                     addingMusicFilesFromDialog(filePathsString.filesPath, folderDialog, globals.saveList);
                 }
@@ -255,13 +258,14 @@ namespace Player
             if (globals.mediaPlayerIsPlaying)
             {
                 globals.mediaPlayerIsPlaying = false;
-                megaPlayer.Stop();
                 changingButtonsClass changingButtons = new changingButtonsClass();
                 changingButtons.playButtonVision(pauseButton, playButton);
             }
-            OpenFileDialog openMusicFileDialog = new OpenFileDialog();
-            openMusicFileDialog.Multiselect = true;
-            openMusicFileDialog.Filter = "Mp3 files (*.mp3)|*.mp3|All files (*.*)|*.*";
+            OpenFileDialog openMusicFileDialog = new OpenFileDialog
+            {
+                Multiselect = true,
+                Filter = "Mp3 files (*.mp3)|*.mp3|All files (*.*)|*.*"
+            };
             if (openMusicFileDialog.ShowDialog() == true)
             {
                     if (globals.saveList == null)
@@ -276,8 +280,11 @@ namespace Player
                         {
                             if (playerListBox.SelectedIndex != -1)
                             {
-                                isEmpty = true;
                                 outputPath = globals.saveList[playerListBox.SelectedIndex].FilePath;
+                            }
+                            else
+                            {
+                                isEmpty = true;
                             }
                             addingMusicFiles(openMusicFileDialog.FileNames, globals.saveList);
                             globals.saveList.Sort((x, y) => String.Compare(x.SongName, y.SongName, StringComparison.Ordinal));
@@ -325,7 +332,6 @@ namespace Player
 
         private void playerListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            megaPlayer.Stop();
             changingButtonsClass changingButtons = new changingButtonsClass();
             globals.mediaPlayerIsPlaying = true;
             globals.clickedItemIndex = playerListBox.SelectedIndex;
@@ -337,6 +343,8 @@ namespace Player
 
             if (File.Exists(globals.saveList[globals.clickedItemIndex].FilePath))
             {
+                if (globals.startToPlay)
+                {
                     megaPlayer.Source = new Uri(globals.saveList[globals.clickedItemIndex].FilePath);
 
                     songName.Content = globals.saveList[globals.clickedItemIndex].SongName;
@@ -357,13 +365,12 @@ namespace Player
                         BitmapImage noteImage = new BitmapImage();
                         setImage(noteImage, "images/note.png");
                     }
-                if (globals.startToPlay)
-                {
+
                     megaPlayer.Play();
-                    changingButtons.pauseButtonVision(pauseButton, playButton);
+                   
+
+                    progressSlider.Value = 0;
                 }
-                progressSlider.Value = 0;
-                
             }
             else
             {
@@ -371,7 +378,9 @@ namespace Player
                 playerListBox.SelectedIndex++;
             }
             
-            globals.mediaPlayerIsPlaying = true;
+            globals.mediaPlayerIsPlaying = true; 
+            changingButtons.pauseButtonVision(pauseButton, playButton);
+            globals.startToPlay = true;
 
         }
 
@@ -467,7 +476,7 @@ namespace Player
             }
         }
 
-        public string outputPath { get; set; }
+        private string outputPath { get; set; }
     }
     }
 

@@ -235,11 +235,23 @@ namespace Player
             openMusicFileDialog.Filter = "Mp3 files (*.mp3)|*.mp3|All files (*.*)|*.*";
             if (openMusicFileDialog.ShowDialog() == true)
             {
-                    addingMusicFiles(openMusicFileDialog.FileNames, globals.saveList);
-                    globals.saveList.Sort((x, y) => String.Compare(x.SongName, y.SongName, StringComparison.Ordinal));
+                    if (globals.saveList == null)
+                        {
+                            List<PlayerList>playerList  = new List<PlayerList>();
+                            addingMusicFiles(openMusicFileDialog.FileNames, playerList);
+                            globals.saveList = playerList;
+                            globals.saveList.Sort((x, y) => String.Compare(x.SongName, y.SongName, StringComparison.Ordinal));
+                        } 
+                    else
+                        {
+                            addingMusicFiles(openMusicFileDialog.FileNames, globals.saveList);
+                            globals.saveList.Sort((x, y) => String.Compare(x.SongName, y.SongName, StringComparison.Ordinal));
+                         }
+                    
                     playerListBox.Items.Clear();
                     for (int index = 0; index < globals.saveList.Count; index++)
                     {
+                        
                         if (globals.saveList[index].Artist == null)
                         {
                             playerListBox.Items.Add(globals.saveList[index].SongName + " - " + "Unknown Artist");

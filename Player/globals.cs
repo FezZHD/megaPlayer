@@ -13,6 +13,7 @@ namespace Player
         public static bool ignoreChange = false;
         public static double albumPicHeight;
         public static double albumPicWidth;
+        public static bool startToPlay = true;
 
     }
 }

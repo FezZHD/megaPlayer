@@ -114,6 +114,7 @@ namespace Player
 
         private void playButton_Click(object sender, RoutedEventArgs e)
         {
+            globals.startToPlay = true;
             if (!globals.mediaPlayerIsPlaying && megaPlayer.Source == null)
             {
                 return;
@@ -127,6 +128,7 @@ namespace Player
 
         private void pauseButton_Click(object sender, RoutedEventArgs e)
         {
+            globals.startToPlay = false;
             if (!globals.mediaPlayerIsPlaying)
             {
                 return;
@@ -158,6 +160,20 @@ namespace Player
 
                     } 
 
+        }
+
+        private int findingItemIndex(string path)
+        {
+            int result = 0;
+            for (int index = 0; index < globals.saveList.Count; index++)
+            {
+                if (globals.saveList[index].FilePath == path)
+                {
+                    result = index;
+                    break;
+                }
+            }
+            return result;
         }
 
         private void addingMusicFilesFromDialog(string[] fileString, FolderBrowserDialog folderDialog, List<PlayerList> playerList)
@@ -193,6 +209,7 @@ namespace Player
 
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e)
         {
+            bool isEmpty = false;
             globals filePathsString = new globals();
             if (globals.mediaPlayerIsPlaying)
             {
@@ -211,18 +228,30 @@ namespace Player
             {
                 if (globals.saveList != null)
                 {
+                    if (playerListBox.SelectedIndex != -1)
+                    {
+                        isEmpty = true;
+                        outputPath = globals.saveList[playerListBox.SelectedIndex].FilePath;
+                    }
                     addingMusicFilesFromDialog(filePathsString.filesPath, folderDialog, globals.saveList);
                 }
                 else
                 {
+                    isEmpty = true;
                     List<PlayerList> playerList = new List<PlayerList>();
                     addingMusicFilesFromDialog(filePathsString.filesPath, folderDialog, playerList);
                 }
+            }
+            if (!isEmpty)
+            {
+                globals.startToPlay = false;
+                playerListBox.SelectedIndex = findingItemIndex(outputPath);
             }
         }
 
         private void addFile_Click(object sender, RoutedEventArgs e)
         {
+            bool isEmpty = false;
             if (globals.mediaPlayerIsPlaying)
             {
                 globals.mediaPlayerIsPlaying = false;
@@ -241,13 +270,18 @@ namespace Player
                             addingMusicFiles(openMusicFileDialog.FileNames, playerList);
                             globals.saveList = playerList;
                             globals.saveList.Sort((x, y) => String.Compare(x.SongName, y.SongName, StringComparison.Ordinal));
+                            isEmpty = true;
                         } 
                     else
                         {
+                            if (playerListBox.SelectedIndex != -1)
+                            {
+                                isEmpty = true;
+                                outputPath = globals.saveList[playerListBox.SelectedIndex].FilePath;
+                            }
                             addingMusicFiles(openMusicFileDialog.FileNames, globals.saveList);
                             globals.saveList.Sort((x, y) => String.Compare(x.SongName, y.SongName, StringComparison.Ordinal));
                          }
-                    
                     playerListBox.Items.Clear();
                     for (int index = 0; index < globals.saveList.Count; index++)
                     {
@@ -262,9 +296,13 @@ namespace Player
                                                     globals.saveList[index].Artist);
                         }
                     }
-
+                if (!isEmpty)
+                {
+                    globals.startToPlay = false;
+                    playerListBox.SelectedIndex = findingItemIndex(outputPath);
+                } 
             }
-                
+                  
         }
 
         private void setImage(BitmapImage imageBitmap,string imagePath, MemoryStream pictureMemoryStream = null)
@@ -298,36 +336,41 @@ namespace Player
             }
 
             if (File.Exists(globals.saveList[globals.clickedItemIndex].FilePath))
-            {   
-                megaPlayer.Source = new Uri(globals.saveList[globals.clickedItemIndex].FilePath);
-                songName.Content = globals.saveList[globals.clickedItemIndex].SongName;
-                artist.Content = globals.saveList[globals.clickedItemIndex].Artist;
-                album.Content = globals.saveList[globals.clickedItemIndex].Album;
-                TagLib.File musicFile = TagLib.File.Create(globals.saveList[globals.clickedItemIndex].FilePath);
-                if (musicFile.Tag.Pictures.Length > 0)
-                {
-                    IPicture albumArt = musicFile.Tag.Pictures[0];
-                    MemoryStream pictureMemoryStream = new MemoryStream(albumArt.Data.Data);
-                    pictureMemoryStream.Seek(0, SeekOrigin.Begin);
+            {
+                    megaPlayer.Source = new Uri(globals.saveList[globals.clickedItemIndex].FilePath);
 
-                    BitmapImage albumArtImage = new BitmapImage();
-                    setImage(albumArtImage, null ,pictureMemoryStream);
-                }
-                else
+                    songName.Content = globals.saveList[globals.clickedItemIndex].SongName;
+                    artist.Content = globals.saveList[globals.clickedItemIndex].Artist;
+                    album.Content = globals.saveList[globals.clickedItemIndex].Album;
+                    TagLib.File musicFile = TagLib.File.Create(globals.saveList[globals.clickedItemIndex].FilePath);
+                    if (musicFile.Tag.Pictures.Length > 0)
+                    {
+                        IPicture albumArt = musicFile.Tag.Pictures[0];
+                        MemoryStream pictureMemoryStream = new MemoryStream(albumArt.Data.Data);
+                        pictureMemoryStream.Seek(0, SeekOrigin.Begin);
+
+                        BitmapImage albumArtImage = new BitmapImage();
+                        setImage(albumArtImage, null, pictureMemoryStream);
+                    }
+                    else
+                    {
+                        BitmapImage noteImage = new BitmapImage();
+                        setImage(noteImage, "images/note.png");
+                    }
+                if (globals.startToPlay)
                 {
-                    BitmapImage noteImage = new BitmapImage();
-                    setImage(noteImage,"images/note.png");
+                    megaPlayer.Play();
+                    changingButtons.pauseButtonVision(pauseButton, playButton);
                 }
-                    
-                megaPlayer.Play();
                 progressSlider.Value = 0;
+                
             }
             else
             {
                 MessageBox.Show(@"Файл удалён. Будет проигрываться следующий трек");
                 playerListBox.SelectedIndex++;
             }
-            changingButtons.pauseButtonVision(pauseButton, playButton);
+            
             globals.mediaPlayerIsPlaying = true;
 
         }
@@ -423,6 +466,8 @@ namespace Player
                 changingButtons.playButtonVision(pauseButton, playButton);
             }
         }
-       }
+
+        public string outputPath { get; set; }
+    }
     }
 

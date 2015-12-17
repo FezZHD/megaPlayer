@@ -158,7 +158,7 @@ namespace Player
                             }
                         }
 
-                    } 
+           } 
 
         }
 
@@ -324,10 +324,8 @@ namespace Player
                imageBitmap.StreamSource = pictureMemoryStream;
            }
             imageBitmap.EndInit();
-            albumPic.Stretch = Stretch.Fill;
             albumPic.Source = imageBitmap;
-            albumPic.Width = globals.albumPicWidth;
-            albumPic.Height = globals.albumPicHeight;
+            albumPic.Stretch = Stretch.Uniform;
         }
 
         private void playerListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -439,14 +437,6 @@ namespace Player
             megaPlayer.Play();
         }
 
-        private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            globals.albumPicHeight = mainWindow.ActualHeight * 0.57;
-            globals.albumPicWidth = mainWindow.ActualWidth * 0.4;
-            albumPic.Height = globals.albumPicHeight;
-            albumPic.Width = globals.albumPicWidth;
-
-        }
 
         private void clearListButton_Click(object sender, RoutedEventArgs e)
         {

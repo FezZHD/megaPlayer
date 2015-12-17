@@ -211,14 +211,6 @@ namespace Player
         {
             bool isEmpty = false;
             globals filePathsString = new globals();
-            if (globals.mediaPlayerIsPlaying)
-            {
-                globals.mediaPlayerIsPlaying = false;
-                megaPlayer.Stop();
-
-                changingButtonsClass changingButtons = new changingButtonsClass();
-                changingButtons.playButtonVision(pauseButton, playButton);
-            }
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
             folderDialog.Description = @"Выберите папку с вашей музыкальной библиотекой.";
             DialogResult dialogResult = folderDialog.ShowDialog();
@@ -244,23 +236,18 @@ namespace Player
                     List<PlayerList> playerList = new List<PlayerList>();
                     addingMusicFilesFromDialog(filePathsString.filesPath, folderDialog, playerList);
                 }
+                   if (!isEmpty)
+                    {
+                        globals.startToPlay = false;
+                        playerListBox.SelectedIndex = findingItemIndex(outputPath);
+                    }
             }
-            if (!isEmpty)
-            {
-                globals.startToPlay = false;
-                playerListBox.SelectedIndex = findingItemIndex(outputPath);
-            }
+           
         }
 
         private void addFile_Click(object sender, RoutedEventArgs e)
         {
             bool isEmpty = false;
-            if (globals.mediaPlayerIsPlaying)
-            {
-                globals.mediaPlayerIsPlaying = false;
-                changingButtonsClass changingButtons = new changingButtonsClass();
-                changingButtons.playButtonVision(pauseButton, playButton);
-            }
             OpenFileDialog openMusicFileDialog = new OpenFileDialog
             {
                 Multiselect = true,
@@ -468,5 +455,5 @@ namespace Player
 
         private string outputPath { get; set; }
     }
-    }
+}
 

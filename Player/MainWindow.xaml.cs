@@ -311,8 +311,10 @@ namespace Player
                    imageBitmap.StreamSource = pictureMemoryStream;
                }
             imageBitmap.EndInit();
-            albumPic.Source = imageBitmap;
             albumPic.Stretch = Stretch.Uniform;
+            albumPic.Source = imageBitmap;
+            
+            
         }
 
         private void playerListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

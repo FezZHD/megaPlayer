@@ -49,26 +49,26 @@ namespace Player
             }
                 if ((megaPlayer.Source != null) && (megaPlayer.NaturalDuration.HasTimeSpan) &&
                 (!globals.userIsDraggingSlider))
-            {
-                globals.ignoreChange = true;
-                progressSlider.Minimum = 0;
-                progressSlider.Maximum = megaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
-                progressSlider.Value = megaPlayer.Position.TotalSeconds;
-                globals.ignoreChange = false;
-                if (progressSlider.Maximum == progressSlider.Value)
-                {
-                    globals.clickedItemIndex++;
-                    if (globals.clickedItemIndex == globals.saveList.Count)
+                 {
+                    globals.ignoreChange = true;
+                    progressSlider.Minimum = 0;
+                    progressSlider.Maximum = megaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+                    progressSlider.Value = megaPlayer.Position.TotalSeconds;
+                    globals.ignoreChange = false;
+                    if (progressSlider.Maximum == progressSlider.Value)
                     {
-                        globals.clickedItemIndex = 0;
-                        playerListBox.SelectedIndex = 0;
-                        return;
+                        globals.clickedItemIndex++;
+                        if (globals.clickedItemIndex == globals.saveList.Count)
+                        {
+                            globals.clickedItemIndex = 0;
+                            playerListBox.SelectedIndex = 0;
+                            return;
+                        }
+                        progressSlider.Value = 0;
+                        playerListBox.SelectedIndex = globals.clickedItemIndex;
+                        playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
                     }
-                    progressSlider.Value = 0;
-                    playerListBox.SelectedIndex = globals.clickedItemIndex;
-                    playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
                 }
-            }
         }
 
         private void progressSlider_DragStarted(object sender, DragStartedEventArgs e)
@@ -275,7 +275,7 @@ namespace Player
                             }
                             addingMusicFiles(openMusicFileDialog.FileNames, globals.saveList);
                             globals.saveList.Sort((x, y) => String.Compare(x.SongName, y.SongName, StringComparison.Ordinal));
-                         }
+                        }
                     playerListBox.Items.Clear();
                     for (int index = 0; index < globals.saveList.Count; index++)
                     {
@@ -306,10 +306,10 @@ namespace Player
             {
                 imageBitmap.UriSource = new Uri(imagePath, UriKind.Relative);
             }
-           if (pictureMemoryStream != null)
-           {
-               imageBitmap.StreamSource = pictureMemoryStream;
-           }
+               if (pictureMemoryStream != null)
+               {
+                   imageBitmap.StreamSource = pictureMemoryStream;
+               }
             imageBitmap.EndInit();
             albumPic.Source = imageBitmap;
             albumPic.Stretch = Stretch.Uniform;
@@ -407,7 +407,6 @@ namespace Player
                 return;
             }
             playerListBox.SelectedIndex = globals.clickedItemIndex;
-            megaPlayer.Source = new Uri(globals.saveList[globals.clickedItemIndex].FilePath);
             progressSlider.Value = 0;
             playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
             globals.mediaPlayerIsPlaying = true;

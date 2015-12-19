@@ -61,12 +61,12 @@ namespace Player
                         if (globals.clickedItemIndex == globals.saveList.Count)
                         {
                             globals.clickedItemIndex = 0;
-                            playerListBox.SelectedIndex = 0;
+                            playerListBox.SelectedIndex = 0;                 
                             return;
                         }
                         progressSlider.Value = 0;
                         playerListBox.SelectedIndex = globals.clickedItemIndex;
-                        playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
+                        
                     }
                 }
         }
@@ -356,7 +356,7 @@ namespace Player
                     }
 
                     megaPlayer.Play();
-                   
+                    playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
 
                     progressSlider.Value = 0;
                 }
@@ -390,7 +390,6 @@ namespace Player
             }
             playerListBox.SelectedIndex = globals.clickedItemIndex;
             progressSlider.Value = 0;
-            playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
             globals.mediaPlayerIsPlaying = true;
             
 
@@ -406,13 +405,12 @@ namespace Player
             }
             if (globals.clickedItemIndex < 0)
             {
-                MessageBox.Show(@"Невозможно воиспроизвети , т.к предыдущий трек является первым в спивке.");
+                MessageBox.Show(@"Невозможно воиспроизвети , т.к предыдущий трек является первым в спиcке.");
                 globals.clickedItemIndex++;
                 return;
             }
             playerListBox.SelectedIndex = globals.clickedItemIndex;
             progressSlider.Value = 0;
-            playerListBox.ScrollIntoView(playerListBox.Items[globals.clickedItemIndex]);
             globals.mediaPlayerIsPlaying = true;
         }
 

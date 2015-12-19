@@ -184,11 +184,13 @@ namespace Player
             playerListBox.Items.Clear();
             if (globals.saveList == null)
             {
-                 globals.saveList = new List<PlayerList>();
-            }
-            for (int index = 0; index < playerList.Count;index++) 
-            {
-                globals.saveList.Add(new PlayerList(playerList[index].SongName,playerList[index].Artist,playerList[index].Album,playerList[index].FilePath));
+                globals.saveList = new List<PlayerList>();
+
+                for (int index = 0; index < playerList.Count; index++)
+                {
+                    globals.saveList.Add(new PlayerList(playerList[index].SongName, playerList[index].Artist,
+                        playerList[index].Album, playerList[index].FilePath));
+                }
             }
             globals.saveList.Sort((first, second) => String.Compare(first.SongName, second.SongName, StringComparison.Ordinal));
             for (int index = 0; index < globals.saveList.Count; index++)

@@ -10,9 +10,8 @@
          FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
     Title="Player" Height="768" Width="1280" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" MinWidth="1280" MinHeight="768" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Icon="images/icon.ico">
     <Grid x:Name="mainGrid" MinWidth="800" MinHeight="600">
-        <Grid x:Name="mainPole" VerticalAlignment="Top" Margin="0,0,0,200">
+        <Grid x:Name="mainPole" VerticalAlignment="Top" Margin="425,0,0,200" HorizontalAlignment="Right">
             <Image x:Name="albumPic" Source="images/note.png" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,40,24,10" VerticalAlignment="Center" HorizontalAlignment="Right" />
-            <ListBox x:Name="playerListBox" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="playerListBox_SelectionChanged" Background="Transparent" Width="400"/>
             <Button x:Name="clearListButton" Content="Button" HorizontalAlignment="Right" Margin="0,3,10,0" VerticalAlignment="Top" Width="37" BorderBrush="{x:Null}" Foreground="{x:Null}" Height="37" Click="clearListButton_Click" ToolTip="Очистка плейлиста" Opacity="0.54">
                 <Button.Background>
                     <ImageBrush Stretch="Uniform" ImageSource="images/clearList.png"/>
@@ -56,6 +55,9 @@
                 </Button.Background>
             </Button>
             <TextBlock x:Name="timer" HorizontalAlignment="Left" Margin="10,166,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Foreground="#DDFFFFFF"/>
+        </Grid>
+        <Grid x:Name="playerListGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400" Margin="0,0,0,200">
+            <ListBox x:Name="playerListBox" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="playerListBox_SelectionChanged" Background="Transparent" Width="400" Margin="0,0,0,0" VerticalContentAlignment="Top"/>
         </Grid>
     </Grid>
 </Window>

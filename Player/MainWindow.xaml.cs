@@ -7,14 +7,12 @@ using TagLib;
 using System.Windows.Forms;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using File = System.IO.File;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using Path = System.IO.Path;
-using SelectionMode = System.Windows.Controls.SelectionMode;
 
 namespace Player
 {
@@ -32,14 +30,14 @@ namespace Player
             dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
             dispatcherTimer.Tick += TimerTick;
             dispatcherTimer.Start();
-           
-            playerListBox.SelectionMode = SelectionMode.Single;
+
+            globals.saveList = new List<PlayerList>();
         }
 
 
         private void TimerTick(object sender, EventArgs e)
         {
-            if (globals.saveList == null)
+            if (globals.saveList.Count == 0 || globals.saveList == null)
             {
                 progressSlider.IsEnabled = false;
             }
@@ -176,43 +174,54 @@ namespace Player
             return result;
         }
 
-        private void addingMusicFilesFromDialog(string[] fileString, FolderBrowserDialog folderDialog, List<PlayerList> playerList)
+        private void addingMusicFilesFromDialog(FolderBrowserDialog folderDialog, List<PlayerList> playerList)
         {
-            fileString = Directory.GetFiles(folderDialog.SelectedPath, "*.mp3",
-                SearchOption.AllDirectories);
+          string[] fileString;
+            try
+            {
+              fileString = Directory.GetFiles(folderDialog.SelectedPath, "*.mp3",
+                    SearchOption.AllDirectories);
+            }
+            catch
+            {
+                MessageBox.Show(@"Ошибка чтения. Возможно, папка, которая вложена в ту , которую вы выбрали, не имеет атрибутов для чтения");
+                return;
+            }
+            
             addingMusicFiles(fileString, playerList);
-            playerListBox.Items.Clear();
-            if (globals.saveList == null)
-            {
-                globals.saveList = new List<PlayerList>();
+                playerListBox.Items.Clear();
+                 if (globals.saveList.Count == 0 || globals.saveList == null)
+                 {
+                    globals.saveList = new List<PlayerList>();
 
-                for (int index = 0; index < playerList.Count; index++)
-                {
-                    globals.saveList.Add(new PlayerList(playerList[index].SongName, playerList[index].Artist,
-                        playerList[index].Album, playerList[index].FilePath));
+                    for (int index = 0; index < playerList.Count; index++)
+                    {
+                        globals.saveList.Add(new PlayerList(playerList[index].SongName, playerList[index].Artist,
+                            playerList[index].Album, playerList[index].FilePath));
+                    }
                 }
-            }
-            globals.saveList.Sort((first, second) => String.Compare(first.SongName, second.SongName, StringComparison.Ordinal));
-            for (int index = 0; index < globals.saveList.Count; index++)
-            {
-                if (globals.saveList[index].Artist == null)
+                globals.saveList.Sort((first, second) => String.Compare(first.SongName, second.SongName, StringComparison.Ordinal));
+                for (int index = 0; index < globals.saveList.Count; index++)
                 {
+                    if (globals.saveList[index].Artist == null)
+                    {
 
-                    playerListBox.Items.Add(globals.saveList[index].SongName + " - " + "Unknown Artist");
+                        playerListBox.Items.Add(globals.saveList[index].SongName + " - " + "Unknown Artist");
+                    }
+                    else
+                    {
+                        playerListBox.Items.Add(globals.saveList[index].SongName + " - " +
+                                                globals.saveList[index].Artist);
+                    }
                 }
-                else
-                {
-                    playerListBox.Items.Add(globals.saveList[index].SongName + " - " +
-                                            globals.saveList[index].Artist);
-                }
-            }
-        }
+           
+        
+    }
 
 
         private void chooseFolderButton_Click(object sender, RoutedEventArgs e)
         {
             bool isEmpty = false;
-            globals filePathsString = new globals();
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
             folderDialog.Description = @"Выберите папку с вашей музыкальной библиотекой.";
             DialogResult dialogResult = folderDialog.ShowDialog();
@@ -220,7 +229,7 @@ namespace Player
            
             if (dialogResult == System.Windows.Forms.DialogResult.OK)
             {
-                if (globals.saveList != null)
+                if (globals.saveList.Count != 0 || globals.saveList != null)
                 {
                     if (playerListBox.SelectedIndex != -1)
                     {
@@ -230,13 +239,13 @@ namespace Player
                     {
                         isEmpty = true;
                     }
-                    addingMusicFilesFromDialog(filePathsString.filesPath, folderDialog, globals.saveList);
+                    addingMusicFilesFromDialog(folderDialog, globals.saveList);
                 }
                 else
                 {
                     isEmpty = true;
                     List<PlayerList> playerList = new List<PlayerList>();
-                    addingMusicFilesFromDialog(filePathsString.filesPath, folderDialog, playerList);
+                    addingMusicFilesFromDialog(folderDialog, playerList);
                 }
                    if (!isEmpty)
                     {
@@ -257,7 +266,7 @@ namespace Player
             };
             if (openMusicFileDialog.ShowDialog() == true)
             {
-                    if (globals.saveList == null)
+                        if (globals.saveList.Count == 0 || globals.saveList == null)
                         {
                             List<PlayerList>playerList  = new List<PlayerList>();
                             addingMusicFiles(openMusicFileDialog.FileNames, playerList);
@@ -313,7 +322,6 @@ namespace Player
                    imageBitmap.StreamSource = pictureMemoryStream;
                }
             imageBitmap.EndInit();
-            albumPic.Stretch = Stretch.Uniform;
             albumPic.Source = imageBitmap;
             
             
@@ -428,7 +436,7 @@ namespace Player
 
         private void clearListButton_Click(object sender, RoutedEventArgs e)
         {
-            if (globals.saveList == null)
+            if(globals.saveList.Count == 0 || globals.saveList == null)
             {
                 MessageBox.Show(@"Плейлист пуст.", @"Очистка плейлиста");
                 return;

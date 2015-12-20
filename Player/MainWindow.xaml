@@ -8,8 +8,8 @@
          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
          Background="{DynamicResource MaterialDesignPaper}"
          FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-    Title="Player" Height="725" Width="1280" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" MinWidth="1280" MinHeight="725" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Icon="images/icon.ico">
-    <Grid x:Name="mainGrid" MinWidth="800" MinHeight="600">
+    Title="Player" Height="600" Width="1000" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" MinWidth="1000" MinHeight="600" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Icon="images/icon.ico">
+    <Grid x:Name="mainGrid">
         <Grid x:Name="mainPole" VerticalAlignment="Top" Margin="425,0,0,200" HorizontalAlignment="Right">
             <Image x:Name="albumPic" Source="images/note.png" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,40,24,10" VerticalAlignment="Center" HorizontalAlignment="Right" />
             <Button x:Name="clearListButton" Content="Button" HorizontalAlignment="Right" Margin="0,3,10,0" VerticalAlignment="Top" Width="37" BorderBrush="{x:Null}" Foreground="{x:Null}" Height="37" Click="clearListButton_Click" ToolTip="Очистка плейлиста" Opacity="0.54">
@@ -18,7 +18,7 @@
                 </Button.Background>
             </Button>
         </Grid>
-        <Grid x:Name="mainButtons" Background="#FF1E7B97" RenderTransformOrigin="0.505,0.477" MinWidth="600" MaxHeight="300" VerticalAlignment="Bottom" Height="200">
+        <Grid x:Name="mainButtons" Background="#FF1E7B97" RenderTransformOrigin="0.505,0.477"   MaxHeight="400" VerticalAlignment="Bottom" Height="auto">
             <Button x:Name="playButton" Style="{StaticResource MaterialDesignFloatingActionButton}" Width="50" Height="50" Foreground="{x:Null}" VerticalAlignment="Center" BorderBrush="White" HorizontalAlignment="Center" Margin="0,75,0,72" Click="playButton_Click" ToolTip="Воиспроизвести">
                 <Button.Background>
                     <ImageBrush ImageSource="images/playArrow.png"/>
@@ -56,8 +56,8 @@
             </Button>
             <TextBlock x:Name="timer" HorizontalAlignment="Left" Margin="10,166,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Foreground="#DDFFFFFF"/>
         </Grid>
-        <Grid x:Name="playerListGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400" Margin="0,0,0,200">
-            <ListBox x:Name="playerListBox" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="playerListBox_SelectionChanged" Background="Transparent" Width="400" Margin="0,0,0,0" VerticalContentAlignment="Top"/>
+        <Grid x:Name="playerListGrid" HorizontalAlignment="Left" VerticalAlignment="Top" MaxWidth="600" Width="350" Margin="0,0,0,200">
+            <ListBox x:Name="playerListBox" SelectionMode="Single" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="playerListBox_SelectionChanged" MaxWidth="600" Background="Transparent" Width="350" Margin="0,0,0,0" VerticalContentAlignment="Top"/>
         </Grid>
     </Grid>
 </Window>

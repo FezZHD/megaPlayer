@@ -5,7 +5,6 @@ namespace Player
 {
     public class globals
     {
-        public string[] filesPath { get; set; }
         public static bool mediaPlayerIsPlaying = false;
         public static bool userIsDraggingSlider = false;
         public static int clickedItemIndex;

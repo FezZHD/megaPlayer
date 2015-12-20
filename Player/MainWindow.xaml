@@ -18,7 +18,7 @@
                 </Button.Background>
             </Button>
         </Grid>
-        <Grid x:Name="mainButtons" Background="#FF1E7B97" RenderTransformOrigin="0.505,0.477"   MaxHeight="400" VerticalAlignment="Bottom" Height="auto">
+        <Grid x:Name="mainButtons" Background="#FF1E7B97" RenderTransformOrigin="0.505,0.477"   MaxHeight="600" VerticalAlignment="Bottom" Height="auto">
             <Button x:Name="playButton" Style="{StaticResource MaterialDesignFloatingActionButton}" Width="50" Height="50" Foreground="{x:Null}" VerticalAlignment="Center" BorderBrush="White" HorizontalAlignment="Center" Margin="0,75,0,72" Click="playButton_Click" ToolTip="Воиспроизвести">
                 <Button.Background>
                     <ImageBrush ImageSource="images/playArrow.png"/>

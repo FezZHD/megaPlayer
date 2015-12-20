@@ -450,7 +450,7 @@ namespace Player
                 timer.Text = null;
                 megaPlayer.Source = null;
                 megaPlayer.Stop();
-                globals.saveList = null;
+                globals.saveList.Clear();
                 playerListBox.Items.Clear();
                 songName.Content = @"Song Name (not Sandstorm)";
                 album.Content = @"Album";

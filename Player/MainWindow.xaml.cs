@@ -37,7 +37,7 @@ namespace Player
 
         private void TimerTick(object sender, EventArgs e)
         {
-            if (globals.saveList.Count == 0 || globals.saveList == null)
+            if (globals.saveList.Count == 0)
             {
                 progressSlider.IsEnabled = false;
             }
@@ -190,9 +190,8 @@ namespace Player
             
             addingMusicFiles(fileString, playerList);
                 playerListBox.Items.Clear();
-                 if (globals.saveList.Count == 0 || globals.saveList == null)
+                 if (globals.saveList.Count == 0)
                  {
-                    globals.saveList = new List<PlayerList>();
 
                     for (int index = 0; index < playerList.Count; index++)
                     {
@@ -229,7 +228,7 @@ namespace Player
            
             if (dialogResult == System.Windows.Forms.DialogResult.OK)
             {
-                if (globals.saveList.Count != 0 || globals.saveList != null)
+                if (globals.saveList.Count != 0)
                 {
                     if (playerListBox.SelectedIndex != -1)
                     {
@@ -266,7 +265,7 @@ namespace Player
             };
             if (openMusicFileDialog.ShowDialog() == true)
             {
-                        if (globals.saveList.Count == 0 || globals.saveList == null)
+                        if (globals.saveList.Count == 0)
                         {
                             List<PlayerList>playerList  = new List<PlayerList>();
                             addingMusicFiles(openMusicFileDialog.FileNames, playerList);
@@ -436,7 +435,7 @@ namespace Player
 
         private void clearListButton_Click(object sender, RoutedEventArgs e)
         {
-            if(globals.saveList.Count == 0 || globals.saveList == null)
+            if(globals.saveList.Count == 0)
             {
                 MessageBox.Show(@"Плейлист пуст.", @"Очистка плейлиста");
                 return;
@@ -450,7 +449,7 @@ namespace Player
                 timer.Text = null;
                 megaPlayer.Source = null;
                 megaPlayer.Stop();
-                globals.saveList = null;
+                globals.saveList.Clear();
                 playerListBox.Items.Clear();
                 songName.Content = @"Song Name (not Sandstorm)";
                 album.Content = @"Album";

@@ -1,11 +1,11 @@
 ﻿namespace Player
 {
-    public  class PlayerList
+    public class PlayerList
     {
-        public string SongName { get; set; }
-        public string Artist { get; set; }
-        public string Album { get; set; }
-        public string FilePath { get; set; }
+        public string SongName { get; private set; }
+        public string Artist { get; private set; }
+        public string Album { get; private set; }
+        public string FilePath { get; private set; }
 
         public PlayerList(string name, string artistName, string albumName, string path)
         {

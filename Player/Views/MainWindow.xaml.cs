@@ -1,20 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Windows.Controls.Primitives;
-using System.Windows;
-using TagLib;
-using System.Windows.Forms;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using File = System.IO.File;
-using MessageBox = System.Windows.MessageBox;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using Path = System.IO.Path;
-
-namespace Player
+﻿namespace Player.Views
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml

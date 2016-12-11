@@ -107,6 +107,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\AsyncCommand.cs" />
+    <Compile Include="Commands\SimpleCommand.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
@@ -207,9 +209,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

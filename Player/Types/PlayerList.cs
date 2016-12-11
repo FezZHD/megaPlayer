@@ -1,4 +1,4 @@
-﻿namespace Player
+﻿namespace Player.Types
 {
     public class PlayerList
     {

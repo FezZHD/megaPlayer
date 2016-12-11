@@ -15,7 +15,7 @@
     </Window.DataContext>
     <Grid x:Name="mainGrid">
         <Grid x:Name="mainPole" VerticalAlignment="Top" Margin="425,0,0,200" HorizontalAlignment="Right">
-            <Image x:Name="albumPic" Source="../images/note.png" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,40,24,10" VerticalAlignment="Center" HorizontalAlignment="Right" />
+            <Image x:Name="albumPic" Source="{Binding AlbumImage}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  Margin="0,40,24,10" VerticalAlignment="Center" HorizontalAlignment="Right" />
             <Button x:Name="clearListButton" Content="Button" HorizontalAlignment="Right" Margin="0,3,10,0" VerticalAlignment="Top" Width="37" BorderBrush="{x:Null}" Foreground="{x:Null}" Height="37"  ToolTip="Очистка плейлиста" Opacity="0.54">
                 <Button.Background>
                     <ImageBrush Stretch="Uniform" ImageSource="../images/clearList.png"/>
@@ -39,7 +39,7 @@
                     </Image.Style>
                 </Image>
             </Button>
-            <Slider x:Name="progressSlider" Margin="10,0,10,39" VerticalAlignment="Bottom" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF96CB91" ToolTip="Зажмите на кординату , чтобы перемотать, или потяните за конец" IsEnabled="False"/>
+            <Slider x:Name="progressSlider" Margin="10,0,10,39" VerticalAlignment="Bottom" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF96CB91" ToolTip="Зажмите на кординату, чтобы перемотать, или потяните за конец" IsEnabled="False"/>
             <Button x:Name="playForward" Style="{StaticResource MaterialDesignFloatingActionButton}" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" Margin="128,75,15,72"  ToolTip="Воиспроизвести вперёд"  >
                 <Button.Background>
                     <ImageBrush ImageSource="../images/playForward.png"/>
@@ -50,9 +50,9 @@
                     <ImageBrush ImageSource="../images/playBackward.png"/>
                 </Button.Background>
             </Button>
-            <Label x:Name="songName"  Content="Song name (not Sandstorm)" HorizontalAlignment="Left" Margin="9,24,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#DDFFFFFF" Width="auto" Height="34" FontSize="20"/>
-            <Label x:Name="artist" Content="Artist" HorizontalAlignment="Left" Margin="9,70,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#DDFFFFFF" FontSize="14"/>
-            <Label x:Name="album" Content="Album" HorizontalAlignment="Right" Margin="0,70,10,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#DDFFFFFF" FontSize="14"/>
+            <Label Content="{Binding SongName}" HorizontalAlignment="Left" Margin="9,24,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#DDFFFFFF" Width="auto" Height="34" FontSize="20"/>
+            <Label Content="{Binding ArtistName}" HorizontalAlignment="Left" Margin="9,70,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#DDFFFFFF" FontSize="14"/>
+            <Label Content="{Binding AlbumName}" HorizontalAlignment="Right" Margin="0,70,10,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#DDFFFFFF" FontSize="14"/>
             <Button x:Name="chooseFolderButton" Content="Button" HorizontalAlignment="Right" Margin="0,10,0,0" VerticalAlignment="Top" Width="32" Height="28" BorderBrush="Transparent" Foreground="{x:Null}"  ToolTip="Добавить все файлы из папки">
                 <Button.Background>
                     <ImageBrush ImageSource="../images/folderChoose.png"/>
@@ -67,7 +67,16 @@
             <TextBlock x:Name="timer" HorizontalAlignment="Left" Margin="10,166,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Foreground="#DDFFFFFF"/>
         </Grid>
         <Grid x:Name="playerListGrid" HorizontalAlignment="Left" VerticalAlignment="Top" MaxWidth="600" Width="350" Margin="0,0,0,200">
-            <ListBox x:Name="playerListBox" SelectionMode="Single" HorizontalAlignment="Left" VerticalAlignment="Top"  MaxWidth="600" Background="Transparent" Width="350" Margin="0,0,0,0" VerticalContentAlignment="Top"/>
+            <ListBox x:Name="playerListBox" ItemsSource="{Binding PlayList}" SelectionMode="Single" HorizontalAlignment="Left" VerticalAlignment="Top"  MaxWidth="600" Background="Transparent" Width="350" Margin="0,0,0,0" VerticalContentAlignment="Top">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Label HorizontalAlignment="Left" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Left" Content="{Binding SongName}"></Label>
+                            <Label HorizontalAlignment="Right" VerticalAlignment="Stretch" HorizontalContentAlignment="Right" Content="{Binding Artist}"></Label>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
     </Grid>
 </Window>

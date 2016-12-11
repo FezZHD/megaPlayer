@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:Player.ViewModel"
         xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:Player"
         mc:Ignorable="d"
          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -14,13 +15,6 @@
     <Window.DataContext>
         <viewModel:ViewModel></viewModel:ViewModel>
     </Window.DataContext>
-    <Window.Resources>
-        <CollectionViewSource x:Key="PlayList" Source="{Binding PlayList}">
-            <CollectionViewSource.SortDescriptions>
-                <componentModel:SortDescription PropertyName="SongName"></componentModel:SortDescription>
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
-    </Window.Resources>
     <Grid x:Name="mainGrid" IsEnabled="{Binding IsNotLoading}">
         <Grid x:Name="mainPole" VerticalAlignment="Top" Margin="425,0,0,200" HorizontalAlignment="Right">
             <Image x:Name="albumPic" Source="{Binding AlbumImage}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  Margin="0,40,24,10" VerticalAlignment="Center" HorizontalAlignment="Right" />
@@ -31,7 +25,7 @@
             </Button>
         </Grid>
         <Grid x:Name="mainButtons" Background="#FF1E7B97" RenderTransformOrigin="0.505,0.477"   MaxHeight="600" VerticalAlignment="Bottom" Height="auto">
-            <Button x:Name="playButton" Style="{StaticResource MaterialDesignFloatingActionButton}" Background="Transparent" Width="50" Height="50" Foreground="{x:Null}" VerticalAlignment="Center" BorderBrush="White" HorizontalAlignment="Center" Margin="0,75,0,72" ToolTip="Воиспроизвести">
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Background="Transparent" Width="50" Height="50" Foreground="{x:Null}" VerticalAlignment="Center" BorderBrush="White" HorizontalAlignment="Center" Margin="0,75,0,72" ToolTip="Воиспроизвести">
                 <Image>
                     <Image.Style>
                     <Style TargetType="{x:Type Image}">
@@ -74,8 +68,13 @@
             </Button>
             <TextBlock x:Name="timer" HorizontalAlignment="Left" Margin="10,166,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Foreground="#DDFFFFFF"/>
         </Grid>
-        <Grid x:Name="playerListGrid" HorizontalAlignment="Left" VerticalAlignment="Top" MaxWidth="600" Width="350" Margin="0,0,0,200">
-            <ListBox x:Name="playerListBox" ItemsSource="{Binding Source={StaticResource PlayList}}" SelectionMode="Single" HorizontalAlignment="Left" VerticalAlignment="Top"  MaxWidth="600" Background="Transparent" Width="350" Margin="0,0,0,0" VerticalContentAlignment="Top">
+        <Grid  HorizontalAlignment="Left" VerticalAlignment="Top" MaxWidth="600" Width="350" Margin="0,0,0,200">
+            <ListBox x:Name="PlayerListBox" ItemsSource="{Binding PlayList}" SelectionMode="Single" HorizontalAlignment="Left" VerticalAlignment="Top"  MaxWidth="600" Background="Transparent" Width="350" Margin="0,0,0,0" VerticalContentAlignment="Top">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonUp">
+                        <i:InvokeCommandAction Command="{Binding PlayFromList}" CommandParameter="{Binding ElementName=PlayerListBox, Path=SelectedIndex}"></i:InvokeCommandAction>
+                    </i:EventTrigger>   
+                </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

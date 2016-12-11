@@ -1,24 +1,24 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Player.Types;
-using System.Threading.Tasks;
 
 namespace Player.Models
 {
     public class FolderLoader
     {
 
-        public ObservableCollection<PlayerList> GetFolder(string path)
+        public List<PlayerList> GetFolder(string path)
         {
-            var list = new ObservableCollection<PlayerList>();
+            var list = new List<PlayerList>();
             GetMusicList(path, list);
+            list.Sort((x, y) => String.Compare(x.SongName, y.SongName, StringComparison.Ordinal));
             return list;
         }
 
 
-        private void GetMusicList(string path, ObservableCollection<PlayerList> playList)
+        private void GetMusicList(string path, List<PlayerList> playList)
         {
            foreach (var directories in Directory.GetDirectories(path))
            {

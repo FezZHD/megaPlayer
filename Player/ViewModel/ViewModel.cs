@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -18,6 +19,7 @@ namespace Player.ViewModel
         public ViewModel()
         {
             IsNotLoading = true;
+            Action<object> playMusicFromList = PlayMusicFromList;
             Func<Task> playListCommand = GetPlayList;
             SongName = "Song name(not Sandstorm)";
             ArtistName = "Artist";
@@ -26,6 +28,7 @@ namespace Player.ViewModel
             AlbumImage = new BitmapImage();
             IsPlaying = false;
             SetDefaultImage();
+            PlayFromList = new CommandWithParammeter(playMusicFromList);
             FolderLoadCommand = new AsyncCommand(playListCommand);
         }
         #endregion
@@ -57,9 +60,9 @@ namespace Player.ViewModel
             }
         }
 
-        private ObservableCollection<PlayerList> playList;
+        private List<PlayerList> playList;
 
-        public ObservableCollection<PlayerList> PlayList
+        public List<PlayerList> PlayList
         {
             get { return playList; }
             set
@@ -159,11 +162,20 @@ namespace Player.ViewModel
             }
         }
 
+
+        private void PlayMusicFromList(object index)
+        {
+            var intIndex = (int) index;
+            MediaElement.Source = new Uri(PlayList[intIndex].FilePath);
+            IsPlaying = true;
+        }
+
         #endregion
 
         #region Commands
 
         public ICommand FolderLoadCommand { get; private set; }
+        public ICommand PlayFromList { get; private set; }
 
         #endregion
 

@@ -21,7 +21,7 @@
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
     </Window.Resources>
-    <Grid x:Name="mainGrid">
+    <Grid x:Name="mainGrid" IsEnabled="{Binding IsNotLoading}">
         <Grid x:Name="mainPole" VerticalAlignment="Top" Margin="425,0,0,200" HorizontalAlignment="Right">
             <Image x:Name="albumPic" Source="{Binding AlbumImage}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  Margin="0,40,24,10" VerticalAlignment="Center" HorizontalAlignment="Right" />
             <Button x:Name="clearListButton" Content="Button" HorizontalAlignment="Right" Margin="0,3,10,0" VerticalAlignment="Top" Width="37" BorderBrush="{x:Null}" Foreground="{x:Null}" Height="37"  ToolTip="Очистка плейлиста" Opacity="0.54">
@@ -36,10 +36,10 @@
                     <Image.Style>
                     <Style TargetType="{x:Type Image}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                <DataTrigger Binding="{Binding IsPlaying}" Value="false">
                                     <Setter Property="Source" Value="../images/playArrow.png"></Setter>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsPlaying}" Value="False">
+                                <DataTrigger Binding="{Binding IsPlaying}" Value="true">
                                     <Setter Property="Source" Value="../images/pause.png"></Setter>
                                 </DataTrigger>
                             </Style.Triggers>

@@ -10,15 +10,15 @@ namespace Player.Models
     public class FolderLoader
     {
 
-        public async Task<ObservableCollection<PlayerList>> GetFolder(string path)
+        public ObservableCollection<PlayerList> GetFolder(string path)
         {
             var list = new ObservableCollection<PlayerList>();
-            await GetMusicList(path, list);
+            GetMusicList(path, list);
             return list;
         }
 
 
-        private async Task GetMusicList(string path, ObservableCollection<PlayerList> playList)
+        private void GetMusicList(string path, ObservableCollection<PlayerList> playList)
         {
            foreach (var directories in Directory.GetDirectories(path))
            {
@@ -28,7 +28,7 @@ namespace Player.Models
                     {
                         playList.Add(AddMusicDescription(file));
                     }
-                    await GetMusicList(directories, playList);
+                    GetMusicList(directories, playList);
                }
                catch (UnauthorizedAccessException ex)
                {

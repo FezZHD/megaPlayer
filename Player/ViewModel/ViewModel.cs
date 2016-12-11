@@ -17,12 +17,14 @@ namespace Player.ViewModel
         #region ctor
         public ViewModel()
         {
+            IsNotLoading = true;
             Func<Task> playListCommand = GetPlayList;
             SongName = "Song name(not Sandstorm)";
             ArtistName = "Artist";
             AlbumName = "Album";
             MediaElement = new MediaElement();
             AlbumImage = new BitmapImage();
+            IsPlaying = false;
             SetDefaultImage();
             FolderLoadCommand = new AsyncCommand(playListCommand);
         }
@@ -42,7 +44,6 @@ namespace Player.ViewModel
                 OnPropertyChanged();
             }
         }
-
 
         private MediaElement mediadElement;
 
@@ -104,6 +105,20 @@ namespace Player.ViewModel
             }
         }
 
+
+        private bool isNotLoading;
+
+        public bool IsNotLoading
+        {
+            get { return isNotLoading; }
+            set
+            {
+                isNotLoading = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         private string albumName;
 
         public string AlbumName
@@ -129,12 +144,18 @@ namespace Player.ViewModel
 
         private async Task GetPlayList()
         {
+
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
             folderDialog.Description = @"Выберите папку с вашей музыкальной библиотекой.";
             DialogResult dialogResult = folderDialog.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {
-                PlayList = await new FolderLoader().GetFolder(folderDialog.SelectedPath);
+                IsNotLoading = false;
+                await Task.Run(() =>
+                {
+                    PlayList = new FolderLoader().GetFolder(folderDialog.SelectedPath);
+                });
+                IsNotLoading = true;
             }
         }
 

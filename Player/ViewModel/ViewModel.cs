@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -19,20 +18,14 @@ namespace Player.ViewModel
         public ViewModel()
         {
             IsNotLoading = true;
-            Action<object> playMusicFromList = PlayMusicFromList;
-            Func<Task> playListGettingCommand = GetPlayList;
-            Action playOnButton = PlayOnButton;
+            IsPlaying = false;
             SongName = "Song name(not Sandstorm)";
             ArtistName = "Artist";
             AlbumName = "Album";
-            MediaElement = new MediaElement();
-            MediaElement.LoadedBehavior = MediaState.Manual;
+            MediaElement = new MediaElement {LoadedBehavior = MediaState.Manual};
             AlbumImage = new BitmapImage();
-            IsPlaying = false;
             AlbumImage = new LoadImage().SetDefaultImage();
-            PlayFromList = new CommandWithParammeter(playMusicFromList);
-            FolderLoadCommand = new AsyncCommand(playListGettingCommand);
-            PlayOnButtonCommand = new SimpleCommand(playOnButton);
+            SetCommands();
         }
         #endregion
 
@@ -170,12 +163,16 @@ namespace Player.ViewModel
 
         private async Task GetPlayList()
         {
-
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
             folderDialog.Description = @"Выберите папку с вашей музыкальной библиотекой.";
             DialogResult dialogResult = folderDialog.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {
+                if (IsPlaying)
+                {
+                    MediaElement.Stop();
+                    IsPlaying = false;
+                }
                 IsNotLoading = false;
                 await Task.Run(() =>
                 {
@@ -191,7 +188,6 @@ namespace Player.ViewModel
         {
             var intIndex = (int) index;
             SetBindings(PlayList[intIndex]);
-            AlbumImage = new LoadImage().LoadAlbumArt(PlayList[intIndex].FilePath);
             MediaElement.Play();           
             IsPlaying = true;
         }
@@ -221,9 +217,38 @@ namespace Player.ViewModel
             ArtistName = musicInfo.Artist;
             AlbumName = musicInfo.Album;
             MediaElement.Source = new Uri(musicInfo.FilePath);
+            AlbumImage = new LoadImage().LoadAlbumArt(musicInfo.FilePath);
 
         }
 
+
+        private void PlayForward()
+        {
+            SelectedIndex++;
+            SetBindings(PlayList[SelectedIndex]);
+        }
+
+
+        private void PlayBackward()
+        {
+            SelectedIndex--;
+            SetBindings(PlayList[SelectedIndex]);
+        }
+
+
+        private void SetCommands()
+        {
+            Action<object> playMusicFromList = PlayMusicFromList;
+            Func<Task> playListGettingCommand = GetPlayList;
+            Action playOnButton = PlayOnButton;
+            Action playForward = PlayForward;
+            Action playBackword = PlayBackward;
+            PlayFromList = new CommandWithParammeter(playMusicFromList);
+            FolderLoadCommand = new AsyncCommand(playListGettingCommand);
+            PlayOnButtonCommand = new SimpleCommand(playOnButton);
+            PlayForwardCommand = new SimpleCommand(playForward);
+            PlayBackwardCommand = new SimpleCommand(playBackword);
+        }
         #endregion
 
         #region Commands
@@ -231,6 +256,8 @@ namespace Player.ViewModel
         public ICommand FolderLoadCommand { get; private set; }
         public ICommand PlayFromList { get; private set; }
         public ICommand PlayOnButtonCommand { get; private set; }
+        public ICommand PlayForwardCommand { get; private set; }
+        public ICommand PlayBackwardCommand { get; private set; }
 
         #endregion
 

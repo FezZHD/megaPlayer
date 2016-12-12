@@ -264,9 +264,9 @@ namespace Player.ViewModel
             {
                 SetBindings(PlayList[SelectedIndex]);
             }
-            catch (IndexOutOfRangeException)
+            catch (ArgumentOutOfRangeException)
             {
-                isPlaying = false;
+                IsPlaying = false;
                 SelectedIndex--;
                 MediaElement.Stop();
             }
@@ -281,9 +281,9 @@ namespace Player.ViewModel
             {
                 SetBindings(PlayList[SelectedIndex]);
             }
-            catch (IndexOutOfRangeException)
+            catch (ArgumentOutOfRangeException)
             {
-                isPlaying = false;
+                IsPlaying = false;
                 SelectedIndex++;
                 MediaElement.Stop();
             }
@@ -359,7 +359,6 @@ namespace Player.ViewModel
             IsDragging = false;
             MediaElement.Position = TimeSpan.FromSeconds(SliderValue);
         }
-
         #endregion
 
         #region private properties

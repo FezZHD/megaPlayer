@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:Player.ViewModel"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:converters="clr-namespace:Player.Converters"
         xmlns:local="clr-namespace:Player"
         mc:Ignorable="d"
          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -14,16 +15,19 @@
     <Window.DataContext>
         <viewModel:ViewModel></viewModel:ViewModel>
     </Window.DataContext>
-    <Grid x:Name="mainGrid" IsEnabled="{Binding IsNotLoading}">
-        <Grid x:Name="mainPole" VerticalAlignment="Top" Margin="425,0,0,200" HorizontalAlignment="Right">
-            <Image x:Name="albumPic" Source="{Binding AlbumImage}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  Margin="0,40,24,10" VerticalAlignment="Stretch" HorizontalAlignment="Right" />
-            <Button x:Name="clearListButton" Visibility="Collapsed" Content="Button" HorizontalAlignment="Right" Margin="0,3,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsLoaded}" Width="37" BorderBrush="{x:Null}" Foreground="{x:Null}" Height="37"  ToolTip="Очистка плейлиста" Opacity="0.54">
+    <Window.Resources>
+        <converters:DateConverter x:Key="DateConverter"></converters:DateConverter>
+    </Window.Resources>
+    <Grid IsEnabled="{Binding IsNotLoading}">
+        <Grid  VerticalAlignment="Top" Margin="425,0,0,200" HorizontalAlignment="Right">
+            <Image  Source="{Binding AlbumImage}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  Margin="0,40,24,10" VerticalAlignment="Stretch" HorizontalAlignment="Right" />
+            <Button  Visibility="Collapsed" Content="Button" HorizontalAlignment="Right" Margin="0,3,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsLoaded}" Width="37" BorderBrush="{x:Null}" Foreground="{x:Null}" Height="37"  ToolTip="Очистка плейлиста" Opacity="0.54">
                 <Button.Background>
                     <ImageBrush Stretch="Uniform" ImageSource="../images/clearList.png"/>
                 </Button.Background>
             </Button>
         </Grid>
-        <Grid x:Name="mainButtons" Background="#FF1E7B97" RenderTransformOrigin="0.505,0.477"   MaxHeight="600" VerticalAlignment="Bottom" Height="auto">
+        <Grid Background="#FF1E7B97" RenderTransformOrigin="0.505,0.477"   MaxHeight="600" VerticalAlignment="Bottom" Height="auto">
             <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding PlayOnButtonCommand}" IsEnabled="{Binding IsLoaded}" Background="Transparent" Width="50" Height="50" Foreground="{x:Null}" VerticalAlignment="Center" BorderBrush="White" HorizontalAlignment="Center" Margin="0,75,0,72" ToolTip="Воиспроизвести">
                 <Image>
                     <Image.Style>
@@ -40,14 +44,14 @@
                     </Image.Style>
                 </Image>
             </Button>
-            <Slider x:Name="ProgressSlider" Thumb.DragStarted="ProgressSlider_OnDragStarted" Thumb.DragCompleted="ProgressSlider_OnDragCompleted"  Margin="10,0,10,39" VerticalAlignment="Bottom" Value="{Binding SliderValue, Mode=TwoWay}" Maximum="{Binding MaxValue}" Minimum="0" IsEnabled="{Binding IsPlaying}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF96CB91" ToolTip="Зажмите на кординату, чтобы перемотать, или потяните за конец">
+            <Slider x:Name="ProgressSlider" IsMoveToPointEnabled="True" Thumb.DragStarted="ProgressSlider_OnDragStarted" Thumb.DragCompleted="ProgressSlider_OnDragCompleted"  Margin="10,0,10,39" VerticalAlignment="Bottom" Value="{Binding SliderValue, Mode=TwoWay}" Maximum="{Binding MaxValue}" Minimum="0" IsEnabled="{Binding IsPlaying}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF96CB91" ToolTip="Дважды кликните на кординату, чтобы перемотать, или потяните за конец">
             </Slider>
-             <Button x:Name="playForward" Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding PlayForwardCommand}" IsEnabled="{Binding IsLoaded}" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" Margin="128,75,15,72"  ToolTip="Воиспроизвести вперёд"  >
+             <Button  Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding PlayForwardCommand}" IsEnabled="{Binding IsLoaded}" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" Margin="128,75,15,72"  ToolTip="Воиспроизвести вперёд"  >
                <Button.Background>
                     <ImageBrush ImageSource="../images/playForward.png"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="playBackward" Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding PlayBackwardCommand}" IsEnabled="{Binding IsLoaded}" Margin="15,75,128,72" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" ToolTip="Воиспроизвести назад" >
+            <Button  Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding PlayBackwardCommand}" IsEnabled="{Binding IsLoaded}" Margin="15,75,128,72" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" ToolTip="Воиспроизвести назад" >
                 <Button.Background>
                     <ImageBrush ImageSource="../images/playBackward.png"/>
                 </Button.Background>
@@ -55,18 +59,19 @@
             <Label Content="{Binding SongName}" HorizontalAlignment="Left" Margin="9,24,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#DDFFFFFF" Width="auto" Height="34" FontSize="20"/>
             <Label Content="{Binding ArtistName}" HorizontalAlignment="Left" Margin="9,70,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#DDFFFFFF" FontSize="14"/>
             <Label Content="{Binding AlbumName}" HorizontalAlignment="Right" Margin="0,70,10,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#DDFFFFFF" FontSize="14"/>
-            <Button x:Name="chooseFolderButton" Content="Button" HorizontalAlignment="Right" Margin="0,10,0,0" VerticalAlignment="Top" Width="32" Height="28" BorderBrush="Transparent" Foreground="{x:Null}" Command="{Binding FolderLoadCommand}"  ToolTip="Добавить все файлы из папки">
+            <Button Content="Button" HorizontalAlignment="Right" Margin="0,10,0,0" VerticalAlignment="Top" Width="32" Height="28" BorderBrush="Transparent" Foreground="{x:Null}" Command="{Binding FolderLoadCommand}"  ToolTip="Добавить все файлы из папки">
                 <Button.Background>
                     <ImageBrush ImageSource="../images/folderChoose.png"/>
                 </Button.Background>
             </Button>
             <ContentControl Content="{Binding MediaElement}"></ContentControl>
-            <Button x:Name="addFile" Visibility="Collapsed" HorizontalAlignment="Right" Margin="0,10,37,0" VerticalAlignment="Top" Width="31" BorderBrush="{x:Null}" Foreground="{x:Null}" Height="28"  ToolTip="Добавить файл(ы) отдельно">
+            <Button Visibility="Collapsed" HorizontalAlignment="Right" Margin="0,10,37,0" VerticalAlignment="Top" Width="31" BorderBrush="{x:Null}" Foreground="{x:Null}" Height="28"  ToolTip="Добавить файл(ы) отдельно">
                 <Button.Background>
                     <ImageBrush ImageSource="../images/addFile.png"/>
                 </Button.Background>
             </Button>
-            <TextBlock x:Name="timer" HorizontalAlignment="Left" Margin="10,166,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Foreground="#DDFFFFFF"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,166,0,0" Text="{Binding SliderValue, Converter={StaticResource DateConverter}}" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Foreground="#DDFFFFFF"/>
+            <TextBlock HorizontalAlignment="Right" Margin="0,166,10,0" Text="{Binding MaxValue, Converter={StaticResource DateConverter}}" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Foreground="#DDFFFFFF"/>
         </Grid>
         <Grid  HorizontalAlignment="Left" VerticalAlignment="Top" MaxWidth="600" Width="350" Margin="0,0,0,200">
             <ListBox x:Name="PlayerListBox" ItemsSource="{Binding PlayList}" SelectionMode="Single" HorizontalAlignment="Left" VerticalAlignment="Top" MaxWidth="600" Background="Transparent" Width="350" Margin="0,0,0,0" VerticalContentAlignment="Top" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}">

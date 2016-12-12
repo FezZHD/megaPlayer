@@ -19,9 +19,9 @@ namespace Player.ViewModel
         {
             IsNotLoading = true;
             IsPlaying = false;
-            SetDefaultBindings();
-            MediaElement = new MediaElement {LoadedBehavior = MediaState.Manual};
             AlbumImage = new BitmapImage();
+            SetDefaultBindings();
+            MediaElement = new MediaElement {LoadedBehavior = MediaState.Manual}; 
             SetCommands();
         }
         #endregion

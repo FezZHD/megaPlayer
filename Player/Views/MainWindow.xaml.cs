@@ -1,4 +1,8 @@
-﻿namespace Player.Views
+﻿using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+
+namespace Player.Views
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
@@ -6,10 +10,12 @@
     public partial class MainWindow
     {
 
+        private readonly ViewModel.ViewModel viewModel;
+
         public MainWindow()
         {
             InitializeComponent();
-
+            viewModel = DataContext as ViewModel.ViewModel;
             //DispatcherTimer dispatcherTimer = new DispatcherTimer();
             //dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
             //dispatcherTimer.Tick += TimerTick;
@@ -446,6 +452,16 @@
 //        }
 
 //        private string outputPath { get; set; }
+        private void ProgressSlider_OnDragStarted(object sender, DragStartedEventArgs e)
+        { 
+           viewModel.OnStartDrag();
+        }
+
+
+        private void ProgressSlider_OnDragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            viewModel.OnCompleteDrag();
         }
     }
+}
 

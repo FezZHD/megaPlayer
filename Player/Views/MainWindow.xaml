@@ -40,9 +40,10 @@
                     </Image.Style>
                 </Image>
             </Button>
-            <Slider x:Name="progressSlider" Margin="10,0,10,39" VerticalAlignment="Bottom" IsEnabled="{Binding IsLoaded}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF96CB91" ToolTip="Зажмите на кординату, чтобы перемотать, или потяните за конец"/>
-            <Button x:Name="playForward" Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding PlayForwardCommand}" IsEnabled="{Binding IsLoaded}" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" Margin="128,75,15,72"  ToolTip="Воиспроизвести вперёд"  >
-                <Button.Background>
+            <Slider x:Name="ProgressSlider" Thumb.DragStarted="ProgressSlider_OnDragStarted" Thumb.DragCompleted="ProgressSlider_OnDragCompleted"  Margin="10,0,10,39" VerticalAlignment="Bottom" Value="{Binding SliderValue, Mode=TwoWay}" Maximum="{Binding MaxValue}" Minimum="0" IsEnabled="{Binding IsPlaying}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF96CB91" ToolTip="Зажмите на кординату, чтобы перемотать, или потяните за конец">
+            </Slider>
+             <Button x:Name="playForward" Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding PlayForwardCommand}" IsEnabled="{Binding IsLoaded}" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" Margin="128,75,15,72"  ToolTip="Воиспроизвести вперёд"  >
+               <Button.Background>
                     <ImageBrush ImageSource="../images/playForward.png"/>
                 </Button.Background>
             </Button>
@@ -90,3 +91,4 @@
         </Grid>
     </Grid>
 </Window>
+

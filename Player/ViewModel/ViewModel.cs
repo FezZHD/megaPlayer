@@ -1,29 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Player.Commands;
 using Player.Models;
 using Player.Types;
 
 namespace Player.ViewModel
 {
-    public class ViewModel:ViewModelBase
+    public class ViewModel : ViewModelBase
     {
 
         #region ctor
+
         public ViewModel()
         {
+            SliderValue = 0;
             IsNotLoading = true;
             IsPlaying = false;
             AlbumImage = new BitmapImage();
             SetDefaultBindings();
-            MediaElement = new MediaElement {LoadedBehavior = MediaState.Manual}; 
+            MediaElement = new MediaElement {LoadedBehavior = MediaState.Manual};
+            MediaElement.MediaOpened += MediaElementOnMediaOpened;
+            InitializeTimer();
             SetCommands();
         }
+
         #endregion
 
 
@@ -152,10 +159,40 @@ namespace Player.ViewModel
                 OnPropertyChanged();
             }
         }
+
+
+        private double sliderValue;
+
+        public double SliderValue
+        {
+            get { return sliderValue; }
+            set
+            {
+                sliderValue = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double maxValue;
+
+        public double MaxValue
+        {
+            get { return maxValue; }
+            set
+            {
+                maxValue = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion
 
         #region privateMethods
 
+        private void MediaElementOnMediaOpened(object sender, RoutedEventArgs routedEventArgs)
+        {
+            MaxValue = MediaElement.NaturalDuration.TimeSpan.TotalSeconds;
+        }
 
 
         private async Task GetPlayList()
@@ -186,7 +223,7 @@ namespace Player.ViewModel
         {
             var intIndex = (int) index;
             SetBindings(PlayList[intIndex]);
-            MediaElement.Play();           
+            MediaElement.Play();
             IsPlaying = true;
         }
 
@@ -205,12 +242,13 @@ namespace Player.ViewModel
                     MediaElement.Play();
                     IsPlaying = true;
                 }
-            } 
+            }
         }
 
 
         private void SetBindings(PlayerList musicInfo)
         {
+            SliderValue = 0;
             SongName = musicInfo.SongName;
             ArtistName = musicInfo.Artist;
             AlbumName = musicInfo.Album;
@@ -222,14 +260,33 @@ namespace Player.ViewModel
         private void PlayForward()
         {
             SelectedIndex++;
-            SetBindings(PlayList[SelectedIndex]);
+            try
+            {
+                SetBindings(PlayList[SelectedIndex]);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                isPlaying = false;
+                SelectedIndex--;
+                MediaElement.Stop();
+            }
+
         }
 
 
         private void PlayBackward()
         {
             SelectedIndex--;
-            SetBindings(PlayList[SelectedIndex]);
+            try
+            {
+                SetBindings(PlayList[SelectedIndex]);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                isPlaying = false;
+                SelectedIndex++;
+                MediaElement.Stop();
+            }
         }
 
 
@@ -255,6 +312,27 @@ namespace Player.ViewModel
             AlbumName = "Album";
             AlbumImage = new LoadImage().SetDefaultImage();
         }
+
+
+        private void InitializeTimer()
+        {
+             DispatcherTimer dispatcherTimer = new DispatcherTimer();
+             dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
+             dispatcherTimer.Tick += TimerTick;
+             dispatcherTimer.Start();
+        }
+
+        private void TimerTick(object sender, EventArgs e)
+        {
+            if (IsPlaying && !IsDragging)
+            {
+                SliderValue = MediaElement.Position.TotalSeconds;
+                if (SliderValue == MaxValue)
+                {
+                    PlayForward();
+                }
+            }
+        }
         #endregion
 
         #region Commands
@@ -267,5 +345,27 @@ namespace Player.ViewModel
 
         #endregion
 
+
+        #region Public methods from view for slider
+
+        public void OnStartDrag()
+        {
+            IsDragging = true;
+        }
+
+
+        public void OnCompleteDrag()
+        {
+            IsDragging = false;
+            MediaElement.Position = TimeSpan.FromSeconds(SliderValue);
+        }
+
+        #endregion
+
+        #region private properties
+
+        private bool IsDragging { get; set; }
+
+        #endregion
     }
 }

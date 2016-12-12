@@ -19,12 +19,9 @@ namespace Player.ViewModel
         {
             IsNotLoading = true;
             IsPlaying = false;
-            SongName = "Song name(not Sandstorm)";
-            ArtistName = "Artist";
-            AlbumName = "Album";
+            SetDefaultBindings();
             MediaElement = new MediaElement {LoadedBehavior = MediaState.Manual};
             AlbumImage = new BitmapImage();
-            AlbumImage = new LoadImage().SetDefaultImage();
             SetCommands();
         }
         #endregion
@@ -168,6 +165,7 @@ namespace Player.ViewModel
             DialogResult dialogResult = folderDialog.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {
+                SetDefaultBindings();
                 if (IsPlaying)
                 {
                     MediaElement.Stop();
@@ -218,7 +216,6 @@ namespace Player.ViewModel
             AlbumName = musicInfo.Album;
             MediaElement.Source = new Uri(musicInfo.FilePath);
             AlbumImage = new LoadImage().LoadAlbumArt(musicInfo.FilePath);
-
         }
 
 
@@ -248,6 +245,15 @@ namespace Player.ViewModel
             PlayOnButtonCommand = new SimpleCommand(playOnButton);
             PlayForwardCommand = new SimpleCommand(playForward);
             PlayBackwardCommand = new SimpleCommand(playBackword);
+        }
+
+
+        private void SetDefaultBindings()
+        {
+            SongName = "Song name(not Sandstorm)";
+            ArtistName = "Artist";
+            AlbumName = "Album";
+            AlbumImage = new LoadImage().SetDefaultImage();
         }
         #endregion
 

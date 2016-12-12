@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -270,7 +271,10 @@ namespace Player.ViewModel
                 SelectedIndex--;
                 MediaElement.Stop();
             }
-
+            catch (FileNotFoundException)
+            {
+                PlayForward();
+            }
         }
 
 
@@ -286,6 +290,10 @@ namespace Player.ViewModel
                 IsPlaying = false;
                 SelectedIndex++;
                 MediaElement.Stop();
+            }
+            catch (FileNotFoundException)
+            {
+                PlayBackward();
             }
         }
 
@@ -342,7 +350,6 @@ namespace Player.ViewModel
         public ICommand PlayOnButtonCommand { get; private set; }
         public ICommand PlayForwardCommand { get; private set; }
         public ICommand PlayBackwardCommand { get; private set; }
-
         #endregion
 
 

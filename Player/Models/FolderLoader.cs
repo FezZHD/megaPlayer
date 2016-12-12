@@ -30,15 +30,11 @@ namespace Player.Models
                     }
                     GetMusicList(directories, playList);
                }
-               catch (UnauthorizedAccessException ex)
+               catch (UnauthorizedAccessException)
                {
-                  Debug.WriteLine(ex.Message);
-                  continue;
                }
-               catch (DirectoryNotFoundException ex)
+               catch (DirectoryNotFoundException)
                {
-                  Debug.WriteLine(ex.Message);
-                  continue;
                }
                     
             }

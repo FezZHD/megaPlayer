@@ -21,7 +21,7 @@
     <Grid IsEnabled="{Binding IsNotLoading}">
         <Grid  VerticalAlignment="Top" Margin="425,0,0,200" HorizontalAlignment="Right">
             <Image  Source="{Binding AlbumImage}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  Margin="0,40,24,10" VerticalAlignment="Stretch" HorizontalAlignment="Right" />
-            <Button  Visibility="Collapsed" Content="Button" HorizontalAlignment="Right" Margin="0,3,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsLoaded}" Width="37" BorderBrush="{x:Null}" Foreground="{x:Null}" Height="37"  ToolTip="Очистка плейлиста" Opacity="0.54">
+            <Button Visibility="Collapsed" Content="Button" HorizontalAlignment="Right" Margin="0,3,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsLoaded}" Width="37" BorderBrush="{x:Null}" Foreground="{x:Null}" Height="37"  ToolTip="Очистка плейлиста" Opacity="0.54">
                 <Button.Background>
                     <ImageBrush Stretch="Uniform" ImageSource="../images/clearList.png"/>
                 </Button.Background>
@@ -46,12 +46,12 @@
             </Button>
             <Slider x:Name="ProgressSlider" IsMoveToPointEnabled="True" Thumb.DragStarted="ProgressSlider_OnDragStarted" Thumb.DragCompleted="ProgressSlider_OnDragCompleted"  Margin="10,0,10,39" VerticalAlignment="Bottom" Value="{Binding SliderValue, Mode=TwoWay}" Maximum="{Binding MaxValue}" Minimum="0" IsEnabled="{Binding IsPlaying}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF96CB91" ToolTip="Дважды кликните на кординату, чтобы перемотать, или потяните за конец">
             </Slider>
-             <Button  Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding PlayForwardCommand}" IsEnabled="{Binding IsLoaded}" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" Margin="128,75,15,72"  ToolTip="Воиспроизвести вперёд"  >
+             <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding PlayForwardCommand}" IsEnabled="{Binding IsLoaded}" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" Margin="128,75,15,72"  ToolTip="Воиспроизвести вперёд"  >
                <Button.Background>
                     <ImageBrush ImageSource="../images/playForward.png"/>
                 </Button.Background>
             </Button>
-            <Button  Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding PlayBackwardCommand}" IsEnabled="{Binding IsLoaded}" Margin="15,75,128,72" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" ToolTip="Воиспроизвести назад" >
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding PlayBackwardCommand}" IsEnabled="{Binding IsLoaded}" Margin="15,75,128,72" Width="40" Height="40"  VerticalAlignment="Center" BorderBrush="{x:Null}" HorizontalAlignment="Center" ToolTip="Воиспроизвести назад" >
                 <Button.Background>
                     <ImageBrush ImageSource="../images/playBackward.png"/>
                 </Button.Background>

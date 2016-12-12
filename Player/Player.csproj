@@ -111,6 +111,7 @@
     <Compile Include="Commands\CommandWithParammeter.cs" />
     <Compile Include="Commands\SimpleCommand.cs" />
     <Compile Include="Models\FolderLoader.cs" />
+    <Compile Include="Models\LoadImage.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

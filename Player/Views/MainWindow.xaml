@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:Player.ViewModel"
-        xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:Player"
         mc:Ignorable="d"
@@ -25,10 +24,10 @@
             </Button>
         </Grid>
         <Grid x:Name="mainButtons" Background="#FF1E7B97" RenderTransformOrigin="0.505,0.477"   MaxHeight="600" VerticalAlignment="Bottom" Height="auto">
-            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Background="Transparent" Width="50" Height="50" Foreground="{x:Null}" VerticalAlignment="Center" BorderBrush="White" HorizontalAlignment="Center" Margin="0,75,0,72" ToolTip="Воиспроизвести">
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding PlayOnButtonCommand}" Background="Transparent" Width="50" Height="50" Foreground="{x:Null}" VerticalAlignment="Center" BorderBrush="White" HorizontalAlignment="Center" Margin="0,75,0,72" ToolTip="Воиспроизвести">
                 <Image>
                     <Image.Style>
-                    <Style TargetType="{x:Type Image}">
+                        <Style TargetType="{x:Type Image}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsPlaying}" Value="false">
                                     <Setter Property="Source" Value="../images/playArrow.png"></Setter>
@@ -69,7 +68,7 @@
             <TextBlock x:Name="timer" HorizontalAlignment="Left" Margin="10,166,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Foreground="#DDFFFFFF"/>
         </Grid>
         <Grid  HorizontalAlignment="Left" VerticalAlignment="Top" MaxWidth="600" Width="350" Margin="0,0,0,200">
-            <ListBox x:Name="PlayerListBox" ItemsSource="{Binding PlayList}" SelectionMode="Single" HorizontalAlignment="Left" VerticalAlignment="Top"  MaxWidth="600" Background="Transparent" Width="350" Margin="0,0,0,0" VerticalContentAlignment="Top">
+            <ListBox x:Name="PlayerListBox" ItemsSource="{Binding PlayList}" SelectionMode="Single" HorizontalAlignment="Left" VerticalAlignment="Top"  MaxWidth="600" Background="Transparent" Width="350" Margin="0,0,0,0" VerticalContentAlignment="Top" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonUp">
                         <i:InvokeCommandAction Command="{Binding PlayFromList}" CommandParameter="{Binding ElementName=PlayerListBox, Path=SelectedIndex}"></i:InvokeCommandAction>

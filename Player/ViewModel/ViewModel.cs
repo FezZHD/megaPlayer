@@ -216,6 +216,7 @@ namespace Player.ViewModel
                 });
                 IsLoaded = PlayList.Count > 0;
                 IsNotLoading = true;
+                SelectedIndex = 0;
             }
         }
 

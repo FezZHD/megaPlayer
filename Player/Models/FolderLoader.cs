@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using Player.Types;
 
@@ -44,7 +43,11 @@ namespace Player.Models
         private PlayerList AddMusicDescription(string path)
         {
             TagLib.File musicFile = TagLib.File.Create(path);
-            return musicFile.Tag != null ? new PlayerList(musicFile.Tag.Title, musicFile.Tag.FirstPerformer, musicFile.Tag.Album, path) : new PlayerList(Path.GetFileName(path), "Unknown Artist", "Unknown Album", path);
+            var musicinfo = new PlayerList(musicFile.Tag.Title ?? Path.GetFileName(path),
+                musicFile.Tag.FirstPerformer,
+                musicFile.Tag.Album, 
+                path);
+            return musicinfo;
         }
     }
 }

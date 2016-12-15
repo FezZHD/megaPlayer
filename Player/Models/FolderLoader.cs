@@ -19,13 +19,20 @@ namespace Player.Models
 
         private void GetMusicList(string path, List<PlayerList> playList)
         {
-           foreach (var directories in Directory.GetDirectories(path))
-           {
-               try
-               {
-                   foreach (var file in Directory.GetFiles(directories, "*.mp3"))
+            foreach (var directories in Directory.GetDirectories(path))
+            {
+                try
+                {
+                    foreach (var file in Directory.GetFiles(directories, "*.mp3"))
                     {
-                        playList.Add(AddMusicDescription(file));
+                        try
+                        {
+                            playList.Add(AddMusicDescription(file));
+                        }
+                        catch (Exception)
+                        {
+                            continue;
+                        }      
                     }
                     GetMusicList(directories, playList);
                }
